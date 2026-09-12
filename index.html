@@ -199,6 +199,17 @@
   .sub-preview.show{display:flex;}
 
   .drama-note{font-size:12.5px;color:var(--ink-soft);font-style:italic;margin:2px 0 8px;}
+
+  .beginner-banner{
+    background:var(--moss-soft);color:var(--moss);border-radius:10px;
+    padding:14px 16px;margin-bottom:22px;font-size:14px;line-height:1.6;
+  }
+  .beginner-banner b{color:var(--moss);}
+
+  /* ---- 假名注音 (ruby) ---- */
+  ruby{font-family:'Noto Sans JP',sans-serif;ruby-position:over;}
+  rt{font-size:0.5em;color:var(--ink-soft);font-weight:400;user-select:none;}
+  .sub-chip rt{font-size:0.55em;}
   .pattern-examples li .ex-jp{color:var(--ink);margin-right:6px;}
 
   .empty-note{color:var(--ink-soft);font-size:14px;padding:30px 0;text-align:center;}
@@ -233,6 +244,11 @@
       <p>五十音・単語・文法・会話パターン ｜ 給學生使用的日語練習</p>
     </div>
   </header>
+
+  <div class="beginner-banner">
+    <b>零基礎學習建議順序:</b>①五十音(先熟悉發音和文字)→②単語 N5 → ③文法 → ④会話パターン。
+    所有例句都標了假名注音,看不懂漢字也能直接照著唸。
+  </div>
 
   <nav class="tabs">
     <button data-tab="kana" class="active">五十音</button>
@@ -324,129 +340,129 @@ const KANA = [
 
 // ---- 單字 N5 ----
 const VOCAB = [
-  {kana:'わたし',kanji:'私',romaji:'watashi',meaning:'我',level:'N5',ex:'私は学生です。',exMeaning:'我是學生。'},
-  {kana:'がっこう',kanji:'学校',romaji:'gakkou',meaning:'學校',level:'N5',ex:'学校は九時からです。',exMeaning:'學校九點開始。'},
-  {kana:'せんせい',kanji:'先生',romaji:'sensei',meaning:'老師',level:'N5',ex:'田中先生はやさしいです。',exMeaning:'田中老師很和藹。'},
-  {kana:'がくせい',kanji:'学生',romaji:'gakusei',meaning:'學生',level:'N5',ex:'私たちは高校の学生です。',exMeaning:'我們是高中生。'},
-  {kana:'ともだち',kanji:'友達',romaji:'tomodachi',meaning:'朋友',level:'N5',ex:'友達と映画を見ます。',exMeaning:'和朋友一起看電影。'},
-  {kana:'かぞく',kanji:'家族',romaji:'kazoku',meaning:'家人',level:'N5',ex:'家族で旅行に行きます。',exMeaning:'和家人一起去旅行。'},
-  {kana:'たべる',kanji:'食べる',romaji:'taberu',meaning:'吃',level:'N5',ex:'朝ごはんを食べます。',exMeaning:'吃早餐。'},
-  {kana:'のむ',kanji:'飲む',romaji:'nomu',meaning:'喝',level:'N5',ex:'水を飲みます。',exMeaning:'喝水。'},
-  {kana:'いく',kanji:'行く',romaji:'iku',meaning:'去',level:'N5',ex:'学校に行きます。',exMeaning:'去學校。'},
-  {kana:'くる',kanji:'来る',romaji:'kuru',meaning:'來',level:'N5',ex:'友達が来ます。',exMeaning:'朋友要來。'},
-  {kana:'みる',kanji:'見る',romaji:'miru',meaning:'看',level:'N5',ex:'テレビを見ます。',exMeaning:'看電視。'},
-  {kana:'きく',kanji:'聞く',romaji:'kiku',meaning:'聽 / 問',level:'N5',ex:'音楽を聞きます。',exMeaning:'聽音樂。'},
-  {kana:'はなす',kanji:'話す',romaji:'hanasu',meaning:'說話',level:'N5',ex:'先生と話します。',exMeaning:'和老師說話。'},
-  {kana:'よむ',kanji:'読む',romaji:'yomu',meaning:'讀',level:'N5',ex:'本を読みます。',exMeaning:'讀書。'},
-  {kana:'かく',kanji:'書く',romaji:'kaku',meaning:'寫',level:'N5',ex:'名前を書きます。',exMeaning:'寫名字。'},
-  {kana:'かう',kanji:'買う',romaji:'kau',meaning:'買',level:'N5',ex:'パンを買います。',exMeaning:'買麵包。'},
-  {kana:'おおきい',kanji:'大きい',romaji:'ookii',meaning:'大的',level:'N5',ex:'この家は大きいです。',exMeaning:'這間房子很大。'},
-  {kana:'ちいさい',kanji:'小さい',romaji:'chiisai',meaning:'小的',level:'N5',ex:'犬は小さいです。',exMeaning:'狗很小。'},
-  {kana:'あたらしい',kanji:'新しい',romaji:'atarashii',meaning:'新的',level:'N5',ex:'新しい靴を買いました。',exMeaning:'買了新鞋子。'},
-  {kana:'きょう',kanji:'今日',romaji:'kyou',meaning:'今天',level:'N5',ex:'今日は暑いです。',exMeaning:'今天很熱。'},
+  {kana:'わたし',kanji:'私',romaji:'watashi',meaning:'我',level:'N5',ex:'{私|わたし}は{学生|がくせい}です。',exMeaning:'我是學生。'},
+  {kana:'がっこう',kanji:'学校',romaji:'gakkou',meaning:'學校',level:'N5',ex:'{学校|がっこう}は{九時|くじ}からです。',exMeaning:'學校九點開始。'},
+  {kana:'せんせい',kanji:'先生',romaji:'sensei',meaning:'老師',level:'N5',ex:'{田中|たなか}{先生|せんせい}はやさしいです。',exMeaning:'田中老師很和藹。'},
+  {kana:'がくせい',kanji:'学生',romaji:'gakusei',meaning:'學生',level:'N5',ex:'{私|わたし}たちは{高校|こうこう}の{学生|がくせい}です。',exMeaning:'我們是高中生。'},
+  {kana:'ともだち',kanji:'友達',romaji:'tomodachi',meaning:'朋友',level:'N5',ex:'{友達|ともだち}と{映画|えいが}を{見|み}ます。',exMeaning:'和朋友一起看電影。'},
+  {kana:'かぞく',kanji:'家族',romaji:'kazoku',meaning:'家人',level:'N5',ex:'{家族|かぞく}で{旅行|りょこう}に{行|い}きます。',exMeaning:'和家人一起去旅行。'},
+  {kana:'たべる',kanji:'食べる',romaji:'taberu',meaning:'吃',level:'N5',ex:'{朝|あさ}ごはんを{食|た}べます。',exMeaning:'吃早餐。'},
+  {kana:'のむ',kanji:'飲む',romaji:'nomu',meaning:'喝',level:'N5',ex:'{水|みず}を{飲|の}みます。',exMeaning:'喝水。'},
+  {kana:'いく',kanji:'行く',romaji:'iku',meaning:'去',level:'N5',ex:'{学校|がっこう}に{行|い}きます。',exMeaning:'去學校。'},
+  {kana:'くる',kanji:'来る',romaji:'kuru',meaning:'來',level:'N5',ex:'{友達|ともだち}が{来|き}ます。',exMeaning:'朋友要來。'},
+  {kana:'みる',kanji:'見る',romaji:'miru',meaning:'看',level:'N5',ex:'テレビを{見|み}ます。',exMeaning:'看電視。'},
+  {kana:'きく',kanji:'聞く',romaji:'kiku',meaning:'聽 / 問',level:'N5',ex:'{音楽|おんがく}を{聞|き}きます。',exMeaning:'聽音樂。'},
+  {kana:'はなす',kanji:'話す',romaji:'hanasu',meaning:'說話',level:'N5',ex:'{先生|せんせい}と{話|はな}します。',exMeaning:'和老師說話。'},
+  {kana:'よむ',kanji:'読む',romaji:'yomu',meaning:'讀',level:'N5',ex:'{本|ほん}を{読|よ}みます。',exMeaning:'讀書。'},
+  {kana:'かく',kanji:'書く',romaji:'kaku',meaning:'寫',level:'N5',ex:'{名前|なまえ}を{書|か}きます。',exMeaning:'寫名字。'},
+  {kana:'かう',kanji:'買う',romaji:'kau',meaning:'買',level:'N5',ex:'パンを{買|か}います。',exMeaning:'買麵包。'},
+  {kana:'おおきい',kanji:'大きい',romaji:'ookii',meaning:'大的',level:'N5',ex:'この{家|いえ}は{大|おお}きいです。',exMeaning:'這間房子很大。'},
+  {kana:'ちいさい',kanji:'小さい',romaji:'chiisai',meaning:'小的',level:'N5',ex:'{犬|いぬ}は{小|ちい}さいです。',exMeaning:'狗很小。'},
+  {kana:'あたらしい',kanji:'新しい',romaji:'atarashii',meaning:'新的',level:'N5',ex:'{新|あたら}しい{靴|くつ}を{買|か}いました。',exMeaning:'買了新鞋子。'},
+  {kana:'きょう',kanji:'今日',romaji:'kyou',meaning:'今天',level:'N5',ex:'{今日|きょう}は{暑|あつ}いです。',exMeaning:'今天很熱。'},
 ].map((d,i)=>({...d, id:'vocab-'+i, type:'vocab'}));
 
 // ---- 文法 ----
 const GRAMMAR = [
   {title:'は — 主題助詞',level:'N5',
     explain:'用來提示句子的主題,「は」讀作 wa。回答問句、自我介紹、對比時常用。',
-    ex:'私は先生です。',exMeaning:'我是老師。',
-    slot:'私は〜です。',subs:['学生','先生','日本人','高校生']},
+    ex:'{私|わたし}は{先生|せんせい}です。',exMeaning:'我是老師。',
+    slot:'{私|わたし}は〜です。',subs:['{学生|がくせい}','{先生|せんせい}','{日本人|にほんじん}','{高校生|こうこうせい}']},
   {title:'を — 受詞助詞',level:'N5',
     explain:'標示動作的對象(受詞),放在名詞後、他動詞前。',
-    ex:'水を飲みます。',exMeaning:'喝水。',
-    slot:'〜を飲みます。',subs:['水','コーヒー','お茶','ジュース']},
+    ex:'{水|みず}を{飲|の}みます。',exMeaning:'喝水。',
+    slot:'〜を{飲|の}みます。',subs:['{水|みず}','コーヒー','お{茶|ちゃ}','ジュース']},
   {title:'に — 時間 / 方向',level:'N5',
     explain:'表示具體時間點或動作到達的方向、對象。常見錯誤:時間用「で」而非「に」。',
-    ex:'七時に起きます。',exMeaning:'七點起床。',
-    slot:'七時に〜。',subs:['起きます','寝ます','出かけます','帰ります']},
+    ex:'{七時|しちじ}に{起|お}きます。',exMeaning:'七點起床。',
+    slot:'{七時|しちじ}に〜。',subs:['{起|お}きます','{寝|ね}ます','{出|で}かけます','{帰|かえ}ります']},
   {title:'で — 場所 / 手段',level:'N5',
     explain:'表示動作發生的場所,或使用的工具、方法。與表示存在的「に」不同,「で」用在有動作發生的地方。',
-    ex:'図書館で勉強します。',exMeaning:'在圖書館唸書。',
-    slot:'図書館で〜。',subs:['勉強します','本を読みます','友達と話します','宿題をします']},
+    ex:'{図書館|としょかん}で{勉強|べんきょう}します。',exMeaning:'在圖書館唸書。',
+    slot:'{図書館|としょかん}で〜。',subs:['{勉強|べんきょう}します','{本|ほん}を{読|よ}みます','{友達|ともだち}と{話|はな}します','{宿題|しゅくだい}をします']},
   {title:'ます形 — 禮貌形',level:'N5',
     explain:'動詞的禮貌體,用於對長輩、老師、初次見面的人。字典形改成ます形時要依動詞類別變化語尾。',
-    ex:'毎日日本語を勉強します。',exMeaning:'每天學習日文。',
-    slot:'毎日〜。',subs:['日本語を勉強します','水を飲みます','学校に行きます','音楽を聞きます']},
+    ex:'{毎日|まいにち}{日本語|にほんご}を{勉強|べんきょう}します。',exMeaning:'每天學習日文。',
+    slot:'{毎日|まいにち}〜。',subs:['{日本語|にほんご}を{勉強|べんきょう}します','{水|みず}を{飲|の}みます','{学校|がっこう}に{行|い}きます','{音楽|おんがく}を{聞|き}きます']},
 ].map((d,i)=>({...d, id:'grammar-'+i, type:'grammar'}));
 
 // ---- 會話句型 ----
 const PATTERNS = [
   {category:'打招呼', template:'〜さん、おはようございます。', meaning:'早安,〜先生/小姐。',
-    subs:['田中','鈴木','王','林'],
-    examples:[{jp:'田中さん、おはようございます。',mn:'田中先生,早安。'},{jp:'鈴木さん、こんにちは。',mn:'鈴木小姐,你好。'}]},
-  {category:'自我介紹', template:'はじめまして、〜と申します。', meaning:'初次見面,我是〜。',
-    subs:['王','林','陳','張'],
-    examples:[{jp:'はじめまして、王と申します。',mn:'初次見面,我姓王。'},{jp:'はじめまして、林と申します。よろしくお願いします。',mn:'初次見面,我姓林,請多多指教。'}]},
+    subs:['{田中|たなか}','{鈴木|すずき}','{王|おう}','{林|はやし}'],
+    examples:[{jp:'{田中|たなか}さん、おはようございます。',mn:'田中先生,早安。'},{jp:'{鈴木|すずき}さん、こんにちは。',mn:'鈴木小姐,你好。'}]},
+  {category:'自我介紹', template:'はじめまして、〜と{申|もう}します。', meaning:'初次見面,我是〜。',
+    subs:['{王|おう}','{林|はやし}','{陳|ちん}','{張|ちょう}'],
+    examples:[{jp:'はじめまして、{王|おう}と{申|もう}します。',mn:'初次見面,我姓王。'},{jp:'はじめまして、{林|はやし}と{申|もう}します。よろしくお{願|ねが}いします。',mn:'初次見面,我姓林,請多多指教。'}]},
   {category:'請求', template:'〜てください。', meaning:'請〜。',
-    subs:['待って','もう一度言って','座って','手伝って'],
-    examples:[{jp:'ちょっと待ってください。',mn:'請稍等一下。'},{jp:'もう一度言ってください。',mn:'請再說一次。'}]},
+    subs:['{待|ま}って','もう{一度|いちど}{言|い}って','{座|すわ}って','{手伝|てつだ}って'],
+    examples:[{jp:'ちょっと{待|ま}ってください。',mn:'請稍等一下。'},{jp:'もう{一度|いちど}{言|い}ってください。',mn:'請再說一次。'}]},
   {category:'請求許可', template:'〜てもいいですか。', meaning:'可以〜嗎?',
-    subs:['ここに座っ','写真を撮っ','窓を開け','ちょっと休憩し'],
-    examples:[{jp:'ここに座ってもいいですか。',mn:'我可以坐這裡嗎?'},{jp:'写真を撮ってもいいですか。',mn:'可以拍照嗎?'}]},
+    subs:['ここに{座|すわ}っ','{写真|しゃしん}を{撮|と}っ','{窓|まど}を{開|あ}け','ちょっと{休憩|きゅうけい}し'],
+    examples:[{jp:'ここに{座|すわ}ってもいいですか。',mn:'我可以坐這裡嗎?'},{jp:'{写真|しゃしん}を{撮|と}ってもいいですか。',mn:'可以拍照嗎?'}]},
   {category:'道歉', template:'すみません、〜。', meaning:'不好意思,〜。',
-    subs:['遅れました','わかりません','間違えました','忘れました'],
-    examples:[{jp:'すみません、遅れました。',mn:'不好意思,我遲到了。'},{jp:'すみません、わかりません。',mn:'不好意思,我不知道。'}]},
+    subs:['{遅|おく}れました','わかりません','{間違|まちが}えました','{忘|わす}れました'],
+    examples:[{jp:'すみません、{遅|おく}れました。',mn:'不好意思,我遲到了。'},{jp:'すみません、わかりません。',mn:'不好意思,我不知道。'}]},
   {category:'道謝', template:'〜てくれてありがとうございます。', meaning:'謝謝你為我〜。',
-    subs:['手伝って','教えて','待って','来て'],
-    examples:[{jp:'手伝ってくれてありがとうございます。',mn:'謝謝你幫忙。'},{jp:'教えてくれてありがとうございます。',mn:'謝謝你教我。'}]},
+    subs:['{手伝|てつだ}って','{教|おし}えて','{待|ま}って','{来|き}て'],
+    examples:[{jp:'{手伝|てつだ}ってくれてありがとうございます。',mn:'謝謝你幫忙。'},{jp:'{教|おし}えてくれてありがとうございます。',mn:'謝謝你教我。'}]},
   {category:'購物', template:'〜はいくらですか。', meaning:'〜多少錢?',
-    subs:['これ','この本','あのかばん','この靴'],
-    examples:[{jp:'この本はいくらですか。',mn:'這本書多少錢?'},{jp:'このかばんはいくらですか。',mn:'這個包包多少錢?'}]},
-  {category:'購物', template:'〜を見せてください。', meaning:'請給我看〜。',
-    subs:['あの服','別の色','大きいサイズ','安いもの'],
-    examples:[{jp:'あの服を見せてください。',mn:'請給我看那件衣服。'},{jp:'別の色を見せてください。',mn:'請給我看別的顏色。'}]},
-  {category:'餐廳', template:'〜をお願いします。', meaning:'請給我〜。',
-    subs:['コーヒー','これ','水','領収書'],
-    examples:[{jp:'コーヒーをお願いします。',mn:'請給我咖啡。'},{jp:'これをお願いします。',mn:'請給我這個。'}]},
-  {category:'餐廳', template:'おすすめは何ですか。', meaning:'有推薦的嗎?',
-    examples:[{jp:'今日のおすすめは何ですか。',mn:'今天有推薦的嗎?'},{jp:'人気のメニューは何ですか。',mn:'哪個是熱門菜色?'}]},
+    subs:['これ','この{本|ほん}','あのかばん','この{靴|くつ}'],
+    examples:[{jp:'この{本|ほん}はいくらですか。',mn:'這本書多少錢?'},{jp:'このかばんはいくらですか。',mn:'這個包包多少錢?'}]},
+  {category:'購物', template:'〜を{見|み}せてください。', meaning:'請給我看〜。',
+    subs:['あの{服|ふく}','{別|べつ}の{色|いろ}','{大|おお}きいサイズ','{安|やす}いもの'],
+    examples:[{jp:'あの{服|ふく}を{見|み}せてください。',mn:'請給我看那件衣服。'},{jp:'{別|べつ}の{色|いろ}を{見|み}せてください。',mn:'請給我看別的顏色。'}]},
+  {category:'餐廳', template:'〜をお{願|ねが}いします。', meaning:'請給我〜。',
+    subs:['コーヒー','これ','{水|みず}','{領収書|りょうしゅうしょ}'],
+    examples:[{jp:'コーヒーをお{願|ねが}いします。',mn:'請給我咖啡。'},{jp:'これをお{願|ねが}いします。',mn:'請給我這個。'}]},
+  {category:'餐廳', template:'おすすめは{何|なん}ですか。', meaning:'有推薦的嗎?',
+    examples:[{jp:'{今日|きょう}のおすすめは{何|なん}ですか。',mn:'今天有推薦的嗎?'},{jp:'{人気|にんき}のメニューは{何|なん}ですか。',mn:'哪個是熱門菜色?'}]},
   {category:'問路', template:'〜はどこですか。', meaning:'〜在哪裡?',
-    subs:['駅','トイレ','コンビニ','出口'],
-    examples:[{jp:'駅はどこですか。',mn:'車站在哪裡?'},{jp:'トイレはどこですか。',mn:'洗手間在哪裡?'}]},
-  {category:'問路', template:'〜までどうやって行きますか。', meaning:'到〜要怎麼去?',
-    subs:['空港','駅','ホテル','東京タワー'],
-    examples:[{jp:'空港までどうやって行きますか。',mn:'到機場要怎麼去?'}]},
-  {category:'時間', template:'〜は何時からですか。', meaning:'〜幾點開始?',
-    subs:['お店','会議','映画','授業'],
-    examples:[{jp:'お店は何時からですか。',mn:'店家幾點開始營業?'},{jp:'会議は何時からですか。',mn:'會議幾點開始?'}]},
-  {category:'邀約', template:'一緒に〜ませんか。', meaning:'要不要一起〜?',
-    subs:['食事し','映画を見','散歩し','お茶をし'],
-    examples:[{jp:'一緒に食事しませんか。',mn:'要不要一起吃飯?'},{jp:'一緒に映画を見ませんか。',mn:'要不要一起看電影?'}]},
+    subs:['{駅|えき}','トイレ','コンビニ','{出口|でぐち}'],
+    examples:[{jp:'{駅|えき}はどこですか。',mn:'車站在哪裡?'},{jp:'トイレはどこですか。',mn:'洗手間在哪裡?'}]},
+  {category:'問路', template:'〜までどうやって{行|い}きますか。', meaning:'到〜要怎麼去?',
+    subs:['{空港|くうこう}','{駅|えき}','ホテル','{東京|とうきょう}タワー'],
+    examples:[{jp:'{空港|くうこう}までどうやって{行|い}きますか。',mn:'到機場要怎麼去?'}]},
+  {category:'時間', template:'〜は{何時|なんじ}からですか。', meaning:'〜幾點開始?',
+    subs:['お{店|みせ}','{会議|かいぎ}','{映画|えいが}','{授業|じゅぎょう}'],
+    examples:[{jp:'お{店|みせ}は{何時|なんじ}からですか。',mn:'店家幾點開始營業?'},{jp:'{会議|かいぎ}は{何時|なんじ}からですか。',mn:'會議幾點開始?'}]},
+  {category:'邀約', template:'{一緒|いっしょ}に〜ませんか。', meaning:'要不要一起〜?',
+    subs:['{食事|しょくじ}し','{映画|えいが}を{見|み}','{散歩|さんぽ}し','お{茶|ちゃ}をし'],
+    examples:[{jp:'{一緒|いっしょ}に{食事|しょくじ}しませんか。',mn:'要不要一起吃飯?'},{jp:'{一緒|いっしょ}に{映画|えいが}を{見|み}ませんか。',mn:'要不要一起看電影?'}]},
   {category:'電話', template:'もしもし、〜です。', meaning:'喂,我是〜。',
-    subs:['田中','鈴木','山田会社の佐藤','受付の林'],
-    examples:[{jp:'もしもし、田中です。',mn:'喂,我是田中。'},{jp:'もしもし、山田会社の鈴木です。',mn:'喂,我是山田公司的鈴木。'}]},
-  {category:'職場', template:'〜、休ませていただけますか。', meaning:'〜可以請假嗎?',
-    subs:['明日','来週の月曜日','午後','今週末'],
-    examples:[{jp:'明日、休ませていただけますか。',mn:'明天可以請假嗎?'},{jp:'来週の月曜日、休ませていただけますか。',mn:'下週一可以請假嗎?'}]},
+    subs:['{田中|たなか}','{鈴木|すずき}','{山田|やまだ}{会社|がいしゃ}の{佐藤|さとう}','{受付|うけつけ}の{林|はやし}'],
+    examples:[{jp:'もしもし、{田中|たなか}です。',mn:'喂,我是田中。'},{jp:'もしもし、{山田|やまだ}{会社|がいしゃ}の{鈴木|すずき}です。',mn:'喂,我是山田公司的鈴木。'}]},
+  {category:'職場', template:'〜、{休|やす}ませていただけますか。', meaning:'〜可以請假嗎?',
+    subs:['{明日|あした}','{来週|らいしゅう}の{月曜日|げつようび}','{午後|ごご}','{今週末|こんしゅうまつ}'],
+    examples:[{jp:'{明日|あした}、{休|やす}ませていただけますか。',mn:'明天可以請假嗎?'},{jp:'{来週|らいしゅう}の{月曜日|げつようび}、{休|やす}ませていただけますか。',mn:'下週一可以請假嗎?'}]},
 
   // ---- 日劇常見台詞:口語、情緒化,跟上面禮貌句型register不同 ----
   {category:'日劇常見台詞', template:'まさか…', meaning:'不會吧…(難以置信)',
     note:'得知衝擊性消息時常用,語尾上揚表示震驚',
-    examples:[{jp:'まさか、彼が犯人だったなんて。',mn:'不會吧,他竟然是犯人。'}]},
-  {category:'日劇常見台詞', template:'信じられない。', meaning:'真不敢相信。',
-    examples:[{jp:'こんなことが起こるなんて信じられない。',mn:'真不敢相信會發生這種事。'}]},
+    examples:[{jp:'まさか、{彼|かれ}が{犯人|はんにん}だったなんて。',mn:'不會吧,他竟然是犯人。'}]},
+  {category:'日劇常見台詞', template:'{信|しん}じられない。', meaning:'真不敢相信。',
+    examples:[{jp:'こんなことが{起|お}こるなんて{信|しん}じられない。',mn:'真不敢相信會發生這種事。'}]},
   {category:'日劇常見台詞', template:'もういい。', meaning:'夠了。／算了。',
     note:'不耐煩、放棄溝通時使用,對朋友家人以外要小心語氣',
-    examples:[{jp:'もういい、勝手にすれば。',mn:'夠了,隨便你。'}]},
-  {category:'日劇常見台詞', template:'大丈夫?', meaning:'你還好嗎?',
-    examples:[{jp:'顔色が悪いよ、大丈夫?',mn:'你臉色不好,還好嗎?'}]},
-  {category:'日劇常見台詞', template:'放っておいて。', meaning:'別管我。',
-    examples:[{jp:'今は放っておいて。',mn:'現在別管我。'}]},
+    examples:[{jp:'もういい、{勝手|かって}にすれば。',mn:'夠了,隨便你。'}]},
+  {category:'日劇常見台詞', template:'{大丈夫|だいじょうぶ}?', meaning:'你還好嗎?',
+    examples:[{jp:'{顔色|かおいろ}が{悪|わる}いよ、{大丈夫|だいじょうぶ}?',mn:'你臉色不好,還好嗎?'}]},
+  {category:'日劇常見台詞', template:'{放|ほう}っておいて。', meaning:'別管我。',
+    examples:[{jp:'{今|いま}は{放|ほう}っておいて。',mn:'現在別管我。'}]},
   {category:'日劇常見台詞', template:'どういうこと?', meaning:'這是怎麼回事?',
-    examples:[{jp:'急に別れるってどういうこと?',mn:'突然說分手是怎麼回事?'}]},
-  {category:'日劇常見台詞', template:'本気なの?', meaning:'你是認真的嗎?',
-    examples:[{jp:'会社を辞めるって本気なの?',mn:'說要辭職是認真的嗎?'}]},
-  {category:'日劇常見台詞', template:'頑張れ。', meaning:'加油。',
+    examples:[{jp:'{急|きゅう}に{別|わか}れるってどういうこと?',mn:'突然說分手是怎麼回事?'}]},
+  {category:'日劇常見台詞', template:'{本気|ほんき}なの?', meaning:'你是認真的嗎?',
+    examples:[{jp:'{会社|かいしゃ}を{辞|や}めるって{本気|ほんき}なの?',mn:'說要辭職是認真的嗎?'}]},
+  {category:'日劇常見台詞', template:'{頑張|がんば}れ。', meaning:'加油。',
     note:'比「頑張ってください」口語、親近,朋友家人之間常用',
-    examples:[{jp:'絶対大丈夫、頑張れ!',mn:'絕對沒問題,加油!'}]},
-  {category:'日劇常見台詞', template:'好きだよ。', meaning:'我喜歡你。',
+    examples:[{jp:'{絶対|ぜったい}{大丈夫|だいじょうぶ}、{頑張|がんば}れ!',mn:'絕對沒問題,加油!'}]},
+  {category:'日劇常見台詞', template:'{好|す}きだよ。', meaning:'我喜歡你。',
     note:'告白場景常見台詞,口語親密語氣',
-    examples:[{jp:'ずっと好きだったよ。',mn:'我一直都喜歡你。'}]},
-  {category:'日劇常見台詞', template:'嘘でしょ?', meaning:'你在開玩笑吧?',
-    examples:[{jp:'合格したの?嘘でしょ!',mn:'你考上了?不會吧!'}]},
-  {category:'日劇常見台詞', template:'助けて!', meaning:'救命!／幫幫我!',
-    examples:[{jp:'誰か助けて!',mn:'誰來幫幫我!'}]},
+    examples:[{jp:'ずっと{好|す}きだったよ。',mn:'我一直都喜歡你。'}]},
+  {category:'日劇常見台詞', template:'{嘘|うそ}でしょ?', meaning:'你在開玩笑吧?',
+    examples:[{jp:'{合格|ごうかく}したの?{嘘|うそ}でしょ!',mn:'你考上了?不會吧!'}]},
+  {category:'日劇常見台詞', template:'{助|たす}けて!', meaning:'救命!／幫幫我!',
+    examples:[{jp:'{誰|だれ}か{助|たす}けて!',mn:'誰來幫幫我!'}]},
   {category:'日劇常見台詞', template:'なんでもない。', meaning:'沒事。(掩飾情緒常用)',
     examples:[{jp:'どうしたの? ううん、なんでもない。',mn:'怎麼了? 沒事,沒什麼。'}]},
 ].map((d,i)=>({...d, id:'pattern-'+i, type:'pattern'}));
@@ -493,13 +509,23 @@ document.addEventListener('click', e=>{
   speak(decodeURIComponent(btn.dataset.say), btn);
 });
 
+/* ---- 假名注音(給完全沒基礎的初學者):{漢字|讀音} 轉成 <ruby> ---- */
+function furigana(text){
+  if(!text) return '';
+  return text.replace(/\{([^{}|]+)\|([^{}|]+)\}/g, '<ruby>$1<rt>$2</rt></ruby>');
+}
+function stripFurigana(text){
+  if(!text) return '';
+  return text.replace(/\{([^{}|]+)\|([^{}|]+)\}/g, '$1');
+}
+
 /* ---- 單詞代換(套用同一個文法/句型架構) ---- */
 function subsBlock(template, subs){
   if(!subs || !subs.length) return '';
   return `
     <div class="subs-row" data-template="${encodeURIComponent(template)}">
       <span class="subs-label">套用看看：</span>
-      ${subs.map(w=>`<button class="sub-chip" type="button" data-word="${encodeURIComponent(w)}">${w}</button>`).join('')}
+      ${subs.map(w=>`<button class="sub-chip" type="button" data-word="${encodeURIComponent(w)}">${furigana(w)}</button>`).join('')}
     </div>
     <div class="sub-preview"></div>`;
 }
@@ -512,11 +538,11 @@ document.addEventListener('click', e=>{
   if(!preview || !preview.classList.contains('sub-preview')) return;
   const template = decodeURIComponent(row.dataset.template);
   const word = decodeURIComponent(chip.dataset.word);
-  const sentence = template.replace('〜', word);
+  const sentenceRaw = template.replace('〜', word);
   row.querySelectorAll('.sub-chip').forEach(c=>c.classList.remove('active'));
   chip.classList.add('active');
   preview.classList.add('show');
-  preview.innerHTML = `<span>${sentence}</span>${sndBtn(sentence)}`;
+  preview.innerHTML = `<span>${furigana(sentenceRaw)}</span>${sndBtn(stripFurigana(sentenceRaw))}`;
 });
 
 const KNOWN_KEY = 'jp_app_known_v1';
@@ -653,7 +679,7 @@ function renderVocab(){
           <input type="checkbox" data-id="${v.id}" ${isKnown(v.id)?'checked':''}>已學
         </div>
       </div>
-      <div class="example"><span class="ex-jp">${v.ex}</span>${sndBtn(v.ex)} ／ ${v.exMeaning}</div>
+      <div class="example"><span class="ex-jp">${furigana(v.ex)}</span>${sndBtn(stripFurigana(v.ex))} ／ ${v.exMeaning}</div>
     </div>`).join('') : `<div class="empty-note">沒有符合條件的單字</div>`;
   document.getElementById('vocab-list').querySelectorAll('input[type=checkbox]').forEach(cb=>{
     cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); renderVocab(); });
@@ -690,7 +716,7 @@ function renderGrammar(){
       <div class="grammar-explain">
         <p>${g.explain}</p>
         ${subsBlock(g.slot, g.subs)}
-        <div class="example"><span class="ex-jp">${g.ex}</span>${sndBtn(g.ex)} ／ ${g.exMeaning}</div>
+        <div class="example"><span class="ex-jp">${furigana(g.ex)}</span>${sndBtn(stripFurigana(g.ex))} ／ ${g.exMeaning}</div>
       </div>
     </div>`).join('') : `<div class="empty-note">沒有符合條件的文法點</div>`;
   document.getElementById('grammar-list').querySelectorAll('.item-card').forEach(card=>{
@@ -735,12 +761,12 @@ function renderPattern(){
       <h3>${cat}</h3>
       ${groups[cat].map(p=>`
         <div class="item-card">
-          <div class="pattern-template">${p.template}${sndBtn(p.template)}</div>
+          <div class="pattern-template">${furigana(p.template)}${sndBtn(stripFurigana(p.template))}</div>
           <div class="pattern-meaning">${p.meaning}</div>
           ${p.note ? `<div class="drama-note">${p.note}</div>` : ''}
           ${subsBlock(p.template, p.subs)}
           <ul class="pattern-examples">
-            ${p.examples.map(e=>`<li><span class="ex-jp">${e.jp}</span>${sndBtn(e.jp)} ${e.mn}</li>`).join('')}
+            ${p.examples.map(e=>`<li><span class="ex-jp">${furigana(e.jp)}</span>${sndBtn(stripFurigana(e.jp))} ${e.mn}</li>`).join('')}
           </ul>
         </div>`).join('')}
     </div>`).join('');

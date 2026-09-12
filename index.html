@@ -250,11 +250,19 @@
     所有例句都標了假名注音,看不懂漢字也能直接照著唸。
   </div>
 
+  <div class="script-toggle" id="disp-mode-toggle">
+    <span class="subs-label" style="align-self:center;">顯示模式：</span>
+    <button data-disp="both" class="active">漢字＋注音</button>
+    <button data-disp="kana">純假名</button>
+    <button data-disp="kanji">漢字為主</button>
+  </div>
+
   <nav class="tabs">
     <button data-tab="kana" class="active">五十音</button>
     <button data-tab="vocab">単語 (N5)</button>
     <button data-tab="grammar">文法</button>
-    <button data-tab="pattern">会話パターン</button>
+    <button data-tab="pattern">会話句型</button>
+    <button data-tab="drama">日劇台詞</button>
   </nav>
 
   <!-- KANA -->
@@ -291,7 +299,7 @@
     <div id="grammar-list"></div>
   </section>
 
-  <!-- PATTERN -->
+  <!-- PATTERN (日常會話句型) -->
   <section id="tab-pattern">
     <div class="toolbar">
       <input type="text" id="pattern-search" placeholder="搜尋句型 / 情境...">
@@ -301,6 +309,15 @@
       <span class="count-badge" id="pattern-count"></span>
     </div>
     <div id="pattern-list"></div>
+  </section>
+
+  <!-- DRAMA (日劇常見台詞) -->
+  <section id="tab-drama">
+    <div class="toolbar">
+      <input type="text" id="drama-search" placeholder="搜尋台詞 / 情境...">
+      <span class="count-badge" id="drama-count"></span>
+    </div>
+    <div id="drama-list"></div>
   </section>
 
 </div>
@@ -360,6 +377,45 @@ const VOCAB = [
   {kana:'ちいさい',kanji:'小さい',romaji:'chiisai',meaning:'小的',level:'N5',ex:'{犬|いぬ}は{小|ちい}さいです。',exMeaning:'狗很小。'},
   {kana:'あたらしい',kanji:'新しい',romaji:'atarashii',meaning:'新的',level:'N5',ex:'{新|あたら}しい{靴|くつ}を{買|か}いました。',exMeaning:'買了新鞋子。'},
   {kana:'きょう',kanji:'今日',romaji:'kyou',meaning:'今天',level:'N5',ex:'{今日|きょう}は{暑|あつ}いです。',exMeaning:'今天很熱。'},
+  {kana:'いま',kanji:'今',romaji:'ima',meaning:'現在',level:'N5',ex:'{今|いま}、{忙|いそが}しいです。',exMeaning:'我現在很忙。'},
+  {kana:'あした',kanji:'明日',romaji:'ashita',meaning:'明天',level:'N5',ex:'{明日|あした}、テストがあります。',exMeaning:'明天有考試。'},
+  {kana:'きのう',kanji:'昨日',romaji:'kinou',meaning:'昨天',level:'N5',ex:'{昨日|きのう}は{楽|たの}しかったです。',exMeaning:'昨天很開心。'},
+  {kana:'ことし',kanji:'今年',romaji:'kotoshi',meaning:'今年',level:'N5',ex:'{今年|ことし}、{日本語|にほんご}を{勉強|べんきょう}します。',exMeaning:'今年要學日文。'},
+  {kana:'じかん',kanji:'時間',romaji:'jikan',meaning:'時間',level:'N5',ex:'{時間|じかん}がありません。',exMeaning:'沒有時間。'},
+  {kana:'かいしゃ',kanji:'会社',romaji:'kaisha',meaning:'公司',level:'N5',ex:'{父|ちち}は{会社|かいしゃ}で{働|はたら}きます。',exMeaning:'爸爸在公司上班。'},
+  {kana:'しごと',kanji:'仕事',romaji:'shigoto',meaning:'工作',level:'N5',ex:'{仕事|しごと}が{忙|いそが}しいです。',exMeaning:'工作很忙。'},
+  {kana:'びょういん',kanji:'病院',romaji:'byouin',meaning:'醫院',level:'N5',ex:'{病院|びょういん}に{行|い}きます。',exMeaning:'去醫院。'},
+  {kana:'えき',kanji:'駅',romaji:'eki',meaning:'車站',level:'N5',ex:'{駅|えき}の{前|まえ}で{待|ま}ちます。',exMeaning:'在車站前面等。'},
+  {kana:'でんしゃ',kanji:'電車',romaji:'densha',meaning:'電車',level:'N5',ex:'{電車|でんしゃ}で{学校|がっこう}に{行|い}きます。',exMeaning:'搭電車去學校。'},
+  {kana:'くるま',kanji:'車',romaji:'kuruma',meaning:'車子',level:'N5',ex:'{車|くるま}で{行|い}きます。',exMeaning:'開車去。'},
+  {kana:'おかね',kanji:'お金',romaji:'okane',meaning:'錢',level:'N5',ex:'お{金|かね}がありません。',exMeaning:'沒有錢。'},
+  {kana:'てんき',kanji:'天気',romaji:'tenki',meaning:'天氣',level:'N5',ex:'{今日|きょう}は{天気|てんき}がいいです。',exMeaning:'今天天氣很好。'},
+  {kana:'あめ',kanji:'雨',romaji:'ame',meaning:'雨',level:'N5',ex:'{雨|あめ}が{降|ふ}っています。',exMeaning:'正在下雨。'},
+  {kana:'ゆき',kanji:'雪',romaji:'yuki',meaning:'雪',level:'N5',ex:'{雪|ゆき}がきれいです。',exMeaning:'雪很漂亮。'},
+  {kana:'あつい',kanji:'暑い',romaji:'atsui',meaning:'熱的',level:'N5',ex:'{今日|きょう}はとても{暑|あつ}いです。',exMeaning:'今天非常熱。'},
+  {kana:'さむい',kanji:'寒い',romaji:'samui',meaning:'冷的',level:'N5',ex:'{冬|ふゆ}は{寒|さむ}いです。',exMeaning:'冬天很冷。'},
+  {kana:'いそがしい',kanji:'忙しい',romaji:'isogashii',meaning:'忙碌的',level:'N5',ex:'{毎日|まいにち}{忙|いそが}しいです。',exMeaning:'每天都很忙。'},
+  {kana:'たのしい',kanji:'楽しい',romaji:'tanoshii',meaning:'開心的',level:'N5',ex:'{旅行|りょこう}は{楽|たの}しかったです。',exMeaning:'旅行很開心。'},
+  {kana:'たかい',kanji:'高い',romaji:'takai',meaning:'貴的／高的',level:'N5',ex:'この{靴|くつ}は{高|たか}いです。',exMeaning:'這雙鞋子很貴。'},
+  {kana:'やすい',kanji:'安い',romaji:'yasui',meaning:'便宜的',level:'N5',ex:'この{店|みせ}は{安|やす}いです。',exMeaning:'這間店很便宜。'},
+  {kana:'すき',kanji:'好き',romaji:'suki',meaning:'喜歡',level:'N5',ex:'{日本語|にほんご}が{好|す}きです。',exMeaning:'我喜歡日文。'},
+  {kana:'きらい',kanji:'嫌い',romaji:'kirai',meaning:'討厭',level:'N5',ex:'{野菜|やさい}が{嫌|きら}いです。',exMeaning:'我討厭青菜。'},
+  {kana:'わかる',kanji:'分かる',romaji:'wakaru',meaning:'明白／懂',level:'N5',ex:'{日本語|にほんご}が{分|わ}かります。',exMeaning:'我懂日文。'},
+  {kana:'しる',kanji:'知る',romaji:'shiru',meaning:'知道',level:'N5',ex:'その{人|ひと}を{知|し}っています。',exMeaning:'我知道那個人。'},
+  {kana:'あう',kanji:'会う',romaji:'au',meaning:'見面',level:'N5',ex:'{友達|ともだち}に{会|あ}います。',exMeaning:'和朋友見面。'},
+  {kana:'すわる',kanji:'座る',romaji:'suwaru',meaning:'坐',level:'N5',ex:'いすに{座|すわ}ります。',exMeaning:'坐在椅子上。'},
+  {kana:'たつ',kanji:'立つ',romaji:'tatsu',meaning:'站',level:'N5',ex:'そこに{立|た}ってください。',exMeaning:'請站在那裡。'},
+  {kana:'やすむ',kanji:'休む',romaji:'yasumu',meaning:'休息／請假',level:'N5',ex:'{今日|きょう}は{学校|がっこう}を{休|やす}みます。',exMeaning:'今天跟學校請假。'},
+  {kana:'はたらく',kanji:'働く',romaji:'hataraku',meaning:'工作',level:'N5',ex:'{父|ちち}は{銀行|ぎんこう}で{働|はたら}いています。',exMeaning:'爸爸在銀行工作。'},
+  {kana:'つかう',kanji:'使う',romaji:'tsukau',meaning:'使用',level:'N5',ex:'パソコンを{使|つか}います。',exMeaning:'使用電腦。'},
+  {kana:'つくる',kanji:'作る',romaji:'tsukuru',meaning:'製作',level:'N5',ex:'{夕飯|ゆうはん}を{作|つく}ります。',exMeaning:'做晚餐。'},
+  {kana:'まつ',kanji:'待つ',romaji:'matsu',meaning:'等待',level:'N5',ex:'ここで{待|ま}ってください。',exMeaning:'請在這裡等。'},
+  {kana:'はいる',kanji:'入る',romaji:'hairu',meaning:'進入',level:'N5',ex:'{部屋|へや}に{入|はい}ります。',exMeaning:'進入房間。'},
+  {kana:'でる',kanji:'出る',romaji:'deru',meaning:'出去／離開',level:'N5',ex:'{家|いえ}を{出|で}ます。',exMeaning:'離開家。'},
+  {kana:'だれ',kanji:'誰',romaji:'dare',meaning:'誰',level:'N5',ex:'あの{人|ひと}は{誰|だれ}ですか。',exMeaning:'那個人是誰?'},
+  {kana:'なに',kanji:'何',romaji:'nani',meaning:'什麼',level:'N5',ex:'これは{何|なん}ですか。',exMeaning:'這是什麼?'},
+  {kana:'いつ',kanji:'',romaji:'itsu',meaning:'什麼時候',level:'N5',ex:'いつ{行|い}きますか。',exMeaning:'什麼時候去?'},
+  {kana:'どこ',kanji:'',romaji:'doko',meaning:'哪裡',level:'N5',ex:'どこに{行|い}きますか。',exMeaning:'要去哪裡?'},
 ].map((d,i)=>({...d, id:'vocab-'+i, type:'vocab'}));
 
 // ---- 文法 ----
@@ -435,8 +491,34 @@ const PATTERNS = [
   {category:'職場', template:'〜、{休|やす}ませていただけますか。', meaning:'〜可以請假嗎?',
     subs:['{明日|あした}','{来週|らいしゅう}の{月曜日|げつようび}','{午後|ごご}','{今週末|こんしゅうまつ}'],
     examples:[{jp:'{明日|あした}、{休|やす}ませていただけますか。',mn:'明天可以請假嗎?'},{jp:'{来週|らいしゅう}の{月曜日|げつようび}、{休|やす}ませていただけますか。',mn:'下週一可以請假嗎?'}]},
+  {category:'天氣', template:'{今日|きょう}は〜ですね。', meaning:'今天很〜呢。',
+    subs:['{暑|あつ}い','{寒|さむ}い','いい{天気|てんき}','{雨|あめ}'],
+    examples:[{jp:'{今日|きょう}は{暑|あつ}いですね。',mn:'今天很熱呢。'},{jp:'{今日|きょう}は{寒|さむ}いですね。',mn:'今天很冷呢。'}]},
+  {category:'健康', template:'〜が{痛|いた}いです。', meaning:'〜很痛。',
+    subs:['{頭|あたま}','お{腹|なか}','{喉|のど}','{歯|は}'],
+    examples:[{jp:'{頭|あたま}が{痛|いた}いです。',mn:'頭很痛。'},{jp:'お{腹|なか}が{痛|いた}いです。',mn:'肚子很痛。'}]},
+  {category:'交通', template:'これは〜{行|い}きですか。', meaning:'這是往〜的車嗎?',
+    subs:['{東京|とうきょう}','{新宿|しんじゅく}','{空港|くうこう}','{渋谷|しぶや}'],
+    examples:[{jp:'これは{東京|とうきょう}{行|い}きですか。',mn:'這是往東京的車嗎?'}]},
+  {category:'交通', template:'どこで{乗|の}り{換|か}えますか。', meaning:'要在哪裡轉車?',
+    examples:[{jp:'{東京駅|とうきょうえき}でどこで{乗|の}り{換|か}えますか。',mn:'要在東京站的哪裡轉車?'}]},
+  {category:'學校生活', template:'{宿題|しゅくだい}は〜までですか。', meaning:'作業要交到〜嗎?',
+    subs:['{明日|あした}','{来週|らいしゅう}','{今日中|きょうじゅう}'],
+    examples:[{jp:'{宿題|しゅくだい}は{明日|あした}までですか。',mn:'作業要交到明天嗎?'}]},
+  {category:'緊急狀況', template:'{救急車|きゅうきゅうしゃ}を{呼|よ}んでください。', meaning:'請幫我叫救護車。',
+    examples:[{jp:'{事故|じこ}です、{救急車|きゅうきゅうしゃ}を{呼|よ}んでください。',mn:'發生事故了,請幫我叫救護車。'}]},
+  {category:'緊急狀況', template:'{警察|けいさつ}を{呼|よ}んでください。', meaning:'請幫我叫警察。',
+    examples:[{jp:'すみません、{警察|けいさつ}を{呼|よ}んでください。',mn:'不好意思,請幫我叫警察。'}]},
+  {category:'確認理解', template:'{分|わ}かりました。', meaning:'我知道了/明白了。',
+    examples:[{jp:'はい、{分|わ}かりました。',mn:'好的,我知道了。'}]},
+  {category:'道別', template:'{気|き}をつけて{帰|かえ}ってね。', meaning:'路上小心,慢走。',
+    examples:[{jp:'{気|き}をつけて{帰|かえ}ってね、また{明日|あした}。',mn:'路上小心,明天見。'}]},
+  {category:'道別', template:'また{今度|こんど}。', meaning:'下次見。',
+    examples:[{jp:'じゃあ、また{今度|こんど}。',mn:'那,下次見。'}]},
+].map((d,i)=>({...d, id:'pattern-'+i, type:'pattern'}));
 
-  // ---- 日劇常見台詞:口語、情緒化,跟上面禮貌句型register不同 ----
+// ---- 日劇常見台詞:口語、情緒化,跟上面禮貌句型 register 不同,獨立分頁 ----
+const DRAMA = [
   {category:'日劇常見台詞', template:'まさか…', meaning:'不會吧…(難以置信)',
     note:'得知衝擊性消息時常用,語尾上揚表示震驚',
     examples:[{jp:'まさか、{彼|かれ}が{犯人|はんにん}だったなんて。',mn:'不會吧,他竟然是犯人。'}]},
@@ -465,7 +547,23 @@ const PATTERNS = [
     examples:[{jp:'{誰|だれ}か{助|たす}けて!',mn:'誰來幫幫我!'}]},
   {category:'日劇常見台詞', template:'なんでもない。', meaning:'沒事。(掩飾情緒常用)',
     examples:[{jp:'どうしたの? ううん、なんでもない。',mn:'怎麼了? 沒事,沒什麼。'}]},
-].map((d,i)=>({...d, id:'pattern-'+i, type:'pattern'}));
+  {category:'日劇常見台詞', template:'{約束|やくそく}するよ。', meaning:'我跟你保證/約定好。',
+    examples:[{jp:'{絶対|ぜったい}に{戻|もど}ってくるって{約束|やくそく}するよ。',mn:'我保證絕對會回來。'}]},
+  {category:'日劇常見台詞', template:'{騙|だま}されないで。', meaning:'不要被騙了。',
+    examples:[{jp:'あの{人|ひと}の{言葉|ことば}に{騙|だま}されないで。',mn:'不要被那個人的話騙了。'}]},
+  {category:'日劇常見台詞', template:'もう{遅|おそ}いよ。', meaning:'已經太遲了。',
+    examples:[{jp:'{今|いま}さら{謝|あやま}っても、もう{遅|おそ}いよ。',mn:'現在才道歉也已經太遲了。'}]},
+  {category:'日劇常見台詞', template:'{諦|あきら}めないで。', meaning:'不要放棄。',
+    examples:[{jp:'まだ{諦|あきら}めないで、{頑張|がんば}ろう。',mn:'還不要放棄,一起加油。'}]},
+  {category:'日劇常見台詞', template:'{運命|うんめい}だと{思|おも}う。', meaning:'我覺得這是命運。',
+    examples:[{jp:'これは{運命|うんめい}だと{思|おも}う。',mn:'我覺得這就是命運。'}]},
+  {category:'日劇常見台詞', template:'{一人|ひとり}にして。', meaning:'讓我一個人靜一靜。',
+    examples:[{jp:'お{願|ねが}い、{今|いま}は{一人|ひとり}にして。',mn:'拜託,現在讓我一個人靜一靜。'}]},
+  {category:'日劇常見台詞', template:'{全部|ぜんぶ}{嘘|うそ}だったの?', meaning:'全部都是謊言嗎?',
+    examples:[{jp:'{今|いま}まで{言|い}ってたこと、{全部|ぜんぶ}{嘘|うそ}だったの?',mn:'你之前說的那些,全部都是謊言嗎?'}]},
+  {category:'日劇常見台詞', template:'ずっとそばにいるよ。', meaning:'我會一直陪在你身邊。',
+    examples:[{jp:'{心配|しんぱい}しないで、ずっとそばにいるよ。',mn:'別擔心,我會一直陪在你身邊。'}]},
+].map((d,i)=>({...d, id:'drama-'+i, type:'drama'}));
 
 /* =========================================================
    已學狀態(localStorage,預留 GAS 同步接口)
@@ -518,6 +616,22 @@ function stripFurigana(text){
   if(!text) return '';
   return text.replace(/\{([^{}|]+)\|([^{}|]+)\}/g, '$1');
 }
+/* ---- 顯示模式:漢字+注音(both) / 純假名(kana) / 漢字為主(kanji) ---- */
+let dispMode = 'both';
+function renderJp(text){
+  if(!text) return '';
+  if(dispMode==='kana') return text.replace(/\{([^{}|]+)\|([^{}|]+)\}/g, '$2');
+  if(dispMode==='kanji') return stripFurigana(text);
+  return furigana(text);
+}
+document.querySelectorAll('#disp-mode-toggle button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#disp-mode-toggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    dispMode = btn.dataset.disp;
+    renderVocab(); renderGrammar(); renderPattern(); renderDrama();
+  });
+});
 
 /* ---- 單詞代換(套用同一個文法/句型架構) ---- */
 function subsBlock(template, subs){
@@ -525,7 +639,7 @@ function subsBlock(template, subs){
   return `
     <div class="subs-row" data-template="${encodeURIComponent(template)}">
       <span class="subs-label">套用看看：</span>
-      ${subs.map(w=>`<button class="sub-chip" type="button" data-word="${encodeURIComponent(w)}">${furigana(w)}</button>`).join('')}
+      ${subs.map(w=>`<button class="sub-chip" type="button" data-word="${encodeURIComponent(w)}">${renderJp(w)}</button>`).join('')}
     </div>
     <div class="sub-preview"></div>`;
 }
@@ -542,7 +656,7 @@ document.addEventListener('click', e=>{
   row.querySelectorAll('.sub-chip').forEach(c=>c.classList.remove('active'));
   chip.classList.add('active');
   preview.classList.add('show');
-  preview.innerHTML = `<span>${furigana(sentenceRaw)}</span>${sndBtn(stripFurigana(sentenceRaw))}`;
+  preview.innerHTML = `<span>${renderJp(sentenceRaw)}</span>${sndBtn(stripFurigana(sentenceRaw))}`;
 });
 
 const KNOWN_KEY = 'jp_app_known_v1';
@@ -666,11 +780,22 @@ function renderVocab(){
     return (v.kana+v.kanji+v.romaji+v.meaning+v.ex+v.exMeaning).toLowerCase().includes(q);
   });
   document.getElementById('vocab-count').textContent = list.length + ' / ' + VOCAB.length + ' 字';
-  document.getElementById('vocab-list').innerHTML = list.length ? list.map(v=>`
+  document.getElementById('vocab-list').innerHTML = list.length ? list.map(v=>{
+    let mainHtml;
+    if(!v.kanji){
+      mainHtml = v.kana;
+    } else if(dispMode==='kana'){
+      mainHtml = v.kana;
+    } else if(dispMode==='kanji'){
+      mainHtml = v.kanji + `<span class="kanji">${v.kana}</span>`;
+    } else {
+      mainHtml = v.kana + `<span class="kanji">${v.kanji}</span>`;
+    }
+    return `
     <div class="item-card">
       <div class="item-top">
         <div class="item-main">
-          <div class="jp-main">${v.kana}<span class="kanji">${v.kanji}</span>${sndBtn(v.kana)}</div>
+          <div class="jp-main">${mainHtml}${sndBtn(v.kana)}</div>
           <div class="romaji">${v.romaji}</div>
           <div class="meaning">${v.meaning}</div>
         </div>
@@ -679,8 +804,9 @@ function renderVocab(){
           <input type="checkbox" data-id="${v.id}" ${isKnown(v.id)?'checked':''}>已學
         </div>
       </div>
-      <div class="example"><span class="ex-jp">${furigana(v.ex)}</span>${sndBtn(stripFurigana(v.ex))} ／ ${v.exMeaning}</div>
-    </div>`).join('') : `<div class="empty-note">沒有符合條件的單字</div>`;
+      <div class="example"><span class="ex-jp">${renderJp(v.ex)}</span>${sndBtn(stripFurigana(v.ex))} ／ ${v.exMeaning}</div>
+    </div>`;
+  }).join('') : `<div class="empty-note">沒有符合條件的單字</div>`;
   document.getElementById('vocab-list').querySelectorAll('input[type=checkbox]').forEach(cb=>{
     cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); renderVocab(); });
   });
@@ -716,7 +842,7 @@ function renderGrammar(){
       <div class="grammar-explain">
         <p>${g.explain}</p>
         ${subsBlock(g.slot, g.subs)}
-        <div class="example"><span class="ex-jp">${furigana(g.ex)}</span>${sndBtn(stripFurigana(g.ex))} ／ ${g.exMeaning}</div>
+        <div class="example"><span class="ex-jp">${renderJp(g.ex)}</span>${sndBtn(stripFurigana(g.ex))} ／ ${g.exMeaning}</div>
       </div>
     </div>`).join('') : `<div class="empty-note">沒有符合條件的文法點</div>`;
   document.getElementById('grammar-list').querySelectorAll('.item-card').forEach(card=>{
@@ -759,23 +885,41 @@ function renderPattern(){
   const html = Object.keys(groups).map(cat=>`
     <div class="pattern-group">
       <h3>${cat}</h3>
-      ${groups[cat].map(p=>`
+      ${groups[cat].map(patternCardHtml).join('')}
+    </div>`).join('');
+  document.getElementById('pattern-list').innerHTML = html || `<div class="empty-note">沒有符合條件的句型</div>`;
+}
+function patternCardHtml(p){
+  return `
         <div class="item-card">
-          <div class="pattern-template">${furigana(p.template)}${sndBtn(stripFurigana(p.template))}</div>
+          <div class="pattern-template">${renderJp(p.template)}${sndBtn(stripFurigana(p.template))}</div>
           <div class="pattern-meaning">${p.meaning}</div>
           ${p.note ? `<div class="drama-note">${p.note}</div>` : ''}
           ${subsBlock(p.template, p.subs)}
           <ul class="pattern-examples">
-            ${p.examples.map(e=>`<li><span class="ex-jp">${furigana(e.jp)}</span>${sndBtn(stripFurigana(e.jp))} ${e.mn}</li>`).join('')}
+            ${p.examples.map(e=>`<li><span class="ex-jp">${renderJp(e.jp)}</span>${sndBtn(stripFurigana(e.jp))} ${e.mn}</li>`).join('')}
           </ul>
-        </div>`).join('')}
-    </div>`).join('');
-  document.getElementById('pattern-list').innerHTML = html || `<div class="empty-note">沒有符合條件的句型</div>`;
+        </div>`;
 }
 document.getElementById('pattern-search').addEventListener('input', renderPattern);
 document.getElementById('pattern-category').addEventListener('change', renderPattern);
 renderPattern();
 
+/* =========================================================
+   日劇常見台詞
+   ========================================================= */
+function renderDrama(){
+  const q = document.getElementById('drama-search').value.trim().toLowerCase();
+  const list = DRAMA.filter(p=>{
+    if(!q) return true;
+    const hay = (p.template+p.meaning+(p.note||'')+p.examples.map(e=>e.jp+e.mn).join('')).toLowerCase();
+    return hay.includes(q);
+  });
+  document.getElementById('drama-count').textContent = list.length + ' / ' + DRAMA.length + ' 句';
+  document.getElementById('drama-list').innerHTML = list.length ? list.map(patternCardHtml).join('') : `<div class="empty-note">沒有符合條件的台詞</div>`;
+}
+document.getElementById('drama-search').addEventListener('input', renderDrama);
+renderDrama();
 
 </script>
 </body>

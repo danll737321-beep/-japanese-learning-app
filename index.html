@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本語トレーニング | 日語學習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --washi:#F6F1E4;
+    --paper:#FFFDF8;
+    --ink:#23324A;
+    --ink-soft:#4A5A72;
+    --vermillion:#BC4B2C;
+    --vermillion-soft:#E7CFC3;
+    --moss:#5C6B4F;
+    --moss-soft:#DCE3D4;
+    --line:#DCD4BE;
+    --line-strong:#C9BE9F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--washi);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(35,50,74,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Noto Sans JP', sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px;}
+
+  /* ---- Header ---- */
+  header{display:flex;align-items:center;gap:18px;margin-bottom:28px;}
+  .hanko{
+    flex:none;
+    width:56px;height:56px;
+    background:var(--vermillion);
+    color:var(--paper);
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho', serif;
+    font-size:30px;font-weight:700;
+    transform:rotate(-3deg);
+    box-shadow:0 3px 0 rgba(35,50,74,0.15);
+  }
+  h1{
+    font-family:'Shippori Mincho', serif;
+    font-size:28px;font-weight:700;margin:0;
+    letter-spacing:.02em;
+  }
+  header p{margin:2px 0 0;color:var(--ink-soft);font-size:14px;}
+
+  /* ---- Tabs ---- */
+  nav.tabs{display:flex;border-bottom:1px solid var(--line-strong);margin-bottom:22px;overflow-x:auto;}
+  nav.tabs button{
+    font-family:'Noto Sans JP',sans-serif;
+    background:none;border:none;
+    padding:12px 18px 14px;
+    font-size:15px;font-weight:500;
+    color:var(--ink-soft);
+    cursor:pointer;position:relative;
+    white-space:nowrap;
+  }
+  nav.tabs button.active{color:var(--ink);}
+  nav.tabs button.active::after{
+    content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:3px;
+    background:var(--vermillion);border-radius:2px 2px 0 0;
+  }
+
+  /* ---- Toolbar ---- */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px;}
+  .toolbar input[type=text]{
+    flex:1 1 200px;
+    padding:9px 12px;
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    background:var(--paper);
+    font-family:inherit;font-size:14px;color:var(--ink);
+  }
+  .toolbar select{
+    padding:9px 10px;border:1px solid var(--line-strong);border-radius:8px;
+    background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);
+  }
+  .toolbar label.chk{
+    display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);
+    padding:9px 10px;border:1px solid transparent;
+  }
+  .toolbar input[type=checkbox]{accent-color:var(--vermillion);width:16px;height:16px;}
+  .count-badge{font-size:12px;color:var(--ink-soft);margin-left:auto;padding:9px 2px;}
+
+  /* ---- Section switching ---- */
+  section{display:none;}
+  section.active{display:block;}
+
+  /* ---- Kana grid ---- */
+  .kana-controls{display:flex;gap:8px;margin-bottom:16px;}
+  .kana-controls button{
+    font-family:inherit;font-size:13px;padding:7px 14px;border-radius:20px;
+    border:1px solid var(--line-strong);background:var(--paper);color:var(--ink-soft);cursor:pointer;
+  }
+  .kana-controls button.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .kana-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;}
+  .kana-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:14px 8px;text-align:center;cursor:pointer;user-select:none;
+    transition:border-color .15s;
+  }
+  .kana-card:hover{border-color:var(--vermillion-soft);}
+  .kana-card .glyph{font-family:'Shippori Mincho',serif;font-size:34px;line-height:1;color:var(--ink);}
+  .kana-card .rom{font-size:12px;color:var(--ink-soft);margin-top:6px;visibility:hidden;}
+  .kana-card.revealed .rom{visibility:visible;}
+  .kana-card .grp{font-size:10px;color:var(--vermillion);margin-top:2px;opacity:.7;}
+
+  /* ---- Vocab / Grammar / Pattern cards ---- */
+  .item-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;margin-bottom:12px;
+  }
+  .item-top{display:flex;align-items:flex-start;gap:12px;}
+  .item-main{flex:1;}
+  .jp-main{font-family:'Shippori Mincho',serif;font-size:22px;color:var(--ink);}
+  .jp-main .kanji{margin-left:8px;font-size:16px;color:var(--ink-soft);font-family:'Noto Sans JP',sans-serif;}
+  .romaji{font-size:12px;color:var(--vermillion);margin-top:2px;}
+  .meaning{font-size:14px;margin-top:4px;color:var(--ink);}
+  .level-tag{
+    font-size:11px;padding:2px 8px;border-radius:12px;background:var(--moss-soft);color:var(--moss);
+    flex:none;align-self:flex-start;
+  }
+  .known-check{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink-soft);}
+  .known-check input{width:18px;height:18px;accent-color:var(--moss);}
+  .example{
+    margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-strong);
+    font-size:13.5px;color:var(--ink-soft);
+  }
+  .example .ex-jp{color:var(--ink);}
+
+  .grammar-explain{margin-top:8px;font-size:14px;color:var(--ink-soft);display:none;}
+  .item-card.open .grammar-explain{display:block;}
+  .item-card.grammar{cursor:pointer;}
+
+  .pattern-group{margin-bottom:22px;}
+  .pattern-group h3{
+    font-family:'Shippori Mincho',serif;font-size:17px;margin:0 0 10px;
+    color:var(--vermillion);border-bottom:1px solid var(--line);padding-bottom:6px;
+  }
+  .pattern-template{font-size:18px;font-family:'Shippori Mincho',serif;color:var(--ink);}
+  .pattern-meaning{font-size:13px;color:var(--ink-soft);margin:4px 0 8px;}
+  .pattern-examples{list-style:none;margin:0;padding:0;}
+  .pattern-examples li{font-size:13.5px;padding:4px 0;color:var(--ink-soft);}
+  .pattern-examples li .ex-jp{color:var(--ink);margin-right:6px;}
+
+  .empty-note{color:var(--ink-soft);font-size:13px;padding:30px 0;text-align:center;}
+
+  /* ---- Sound button ---- */
+  .snd{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;border-radius:50%;
+    border:1px solid var(--line-strong);background:var(--washi);
+    color:var(--ink-soft);cursor:pointer;flex:none;
+    font-size:12px;line-height:1;vertical-align:middle;margin-left:6px;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .snd:hover{background:var(--vermillion);border-color:var(--vermillion);color:var(--paper);}
+  .snd.playing{background:var(--vermillion);border-color:var(--vermillion);color:var(--paper);}
+  .kana-card{position:relative;}
+  .kana-card .snd{position:absolute;top:6px;right:6px;width:20px;height:20px;font-size:10px;}
+  .ex-jp .snd,.pattern-template .snd,.jp-main .snd{margin-left:8px;}
+
+  @media (max-width:520px){
+    .kana-grid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr));}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="hanko">学</div>
+    <div>
+      <h1>日本語トレーニング</h1>
+      <p>五十音・単語・文法・会話パターン ｜ 給學生使用的日語練習</p>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="kana" class="active">五十音</button>
+    <button data-tab="vocab">単語 (N5)</button>
+    <button data-tab="grammar">文法</button>
+    <button data-tab="pattern">会話パターン</button>
+  </nav>
+
+  <!-- KANA -->
+  <section id="tab-kana" class="active">
+    <div class="kana-controls">
+      <button data-kgroup="all" class="active">全部</button>
+      <button data-kgroup="seion">清音</button>
+      <button data-kgroup="dakuten">濁音</button>
+      <button data-kgroup="handakuten">半濁音</button>
+    </div>
+    <div class="toolbar">
+      <span style="font-size:13px;color:var(--ink-soft);">點卡片顯示羅馬拼音</span>
+      <span class="count-badge" id="kana-count"></span>
+    </div>
+    <div class="kana-grid" id="kana-grid"></div>
+  </section>
+
+  <!-- VOCAB -->
+  <section id="tab-vocab">
+    <div class="toolbar">
+      <input type="text" id="vocab-search" placeholder="搜尋單字 / 意思 / 例句...">
+      <select id="vocab-level">
+        <option value="all">全部級數</option>
+        <option value="N5">N5</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="vocab-hide-known"> 隱藏已學</label>
+      <span class="count-badge" id="vocab-count"></span>
+    </div>
+    <div id="vocab-list"></div>
+  </section>
+
+  <!-- GRAMMAR -->
+  <section id="tab-grammar">
+    <div class="toolbar">
+      <input type="text" id="grammar-search" placeholder="搜尋文法點...">
+      <label class="chk"><input type="checkbox" id="grammar-hide-known"> 隱藏已學</label>
+      <span class="count-badge" id="grammar-count"></span>
+    </div>
+    <div id="grammar-list"></div>
+  </section>
+
+  <!-- PATTERN -->
+  <section id="tab-pattern">
+    <div class="toolbar">
+      <input type="text" id="pattern-search" placeholder="搜尋句型 / 情境...">
+      <select id="pattern-category">
+        <option value="all">全部情境</option>
+      </select>
+      <span class="count-badge" id="pattern-count"></span>
+    </div>
+    <div id="pattern-list"></div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   資料區
+   type: kana / vocab / grammar / pattern
+   已學狀態存 localStorage,之後要接 Google Sheets 同步時,
+   把 SYNC_URL 換成你的 GAS /exec 網址,並在 pushKnown() /
+   pullKnown() 補上 fetch 邏輯(可參考 TOEFL vocab app 的作法)
+   ========================================================= */
+
+const SYNC_URL = ""; // TODO: 換成 GAS /exec 網址啟用跨裝置同步
+
+// ---- 五十音 ----
+const KANA = [
+  // 清音
+  {h:'あ',k:'ア',r:'a',g:'seion'},{h:'い',k:'イ',r:'i',g:'seion'},{h:'う',k:'ウ',r:'u',g:'seion'},{h:'え',k:'エ',r:'e',g:'seion'},{h:'お',k:'オ',r:'o',g:'seion'},
+  {h:'か',k:'カ',r:'ka',g:'seion'},{h:'き',k:'キ',r:'ki',g:'seion'},{h:'く',k:'ク',r:'ku',g:'seion'},{h:'け',k:'ケ',r:'ke',g:'seion'},{h:'こ',k:'コ',r:'ko',g:'seion'},
+  {h:'さ',k:'サ',r:'sa',g:'seion'},{h:'し',k:'シ',r:'shi',g:'seion'},{h:'す',k:'ス',r:'su',g:'seion'},{h:'せ',k:'セ',r:'se',g:'seion'},{h:'そ',k:'ソ',r:'so',g:'seion'},
+  {h:'た',k:'タ',r:'ta',g:'seion'},{h:'ち',k:'チ',r:'chi',g:'seion'},{h:'つ',k:'ツ',r:'tsu',g:'seion'},{h:'て',k:'テ',r:'te',g:'seion'},{h:'と',k:'ト',r:'to',g:'seion'},
+  {h:'な',k:'ナ',r:'na',g:'seion'},{h:'に',k:'ニ',r:'ni',g:'seion'},{h:'ぬ',k:'ヌ',r:'nu',g:'seion'},{h:'ね',k:'ネ',r:'ne',g:'seion'},{h:'の',k:'ノ',r:'no',g:'seion'},
+  {h:'は',k:'ハ',r:'ha',g:'seion'},{h:'ひ',k:'ヒ',r:'hi',g:'seion'},{h:'ふ',k:'フ',r:'fu',g:'seion'},{h:'へ',k:'ヘ',r:'he',g:'seion'},{h:'ほ',k:'ホ',r:'ho',g:'seion'},
+  {h:'ま',k:'マ',r:'ma',g:'seion'},{h:'み',k:'ミ',r:'mi',g:'seion'},{h:'む',k:'ム',r:'mu',g:'seion'},{h:'め',k:'メ',r:'me',g:'seion'},{h:'も',k:'モ',r:'mo',g:'seion'},
+  {h:'や',k:'ヤ',r:'ya',g:'seion'},{h:'ゆ',k:'ユ',r:'yu',g:'seion'},{h:'よ',k:'ヨ',r:'yo',g:'seion'},
+  {h:'ら',k:'ラ',r:'ra',g:'seion'},{h:'り',k:'リ',r:'ri',g:'seion'},{h:'る',k:'ル',r:'ru',g:'seion'},{h:'れ',k:'レ',r:'re',g:'seion'},{h:'ろ',k:'ロ',r:'ro',g:'seion'},
+  {h:'わ',k:'ワ',r:'wa',g:'seion'},{h:'を',k:'ヲ',r:'wo',g:'seion'},{h:'ん',k:'ン',r:'n',g:'seion'},
+  // 濁音
+  {h:'が',k:'ガ',r:'ga',g:'dakuten'},{h:'ぎ',k:'ギ',r:'gi',g:'dakuten'},{h:'ぐ',k:'グ',r:'gu',g:'dakuten'},{h:'げ',k:'ゲ',r:'ge',g:'dakuten'},{h:'ご',k:'ゴ',r:'go',g:'dakuten'},
+  {h:'ざ',k:'ザ',r:'za',g:'dakuten'},{h:'じ',k:'ジ',r:'ji',g:'dakuten'},{h:'ず',k:'ズ',r:'zu',g:'dakuten'},{h:'ぜ',k:'ゼ',r:'ze',g:'dakuten'},{h:'ぞ',k:'ゾ',r:'zo',g:'dakuten'},
+  {h:'だ',k:'ダ',r:'da',g:'dakuten'},{h:'ぢ',k:'ヂ',r:'ji',g:'dakuten'},{h:'づ',k:'ヅ',r:'zu',g:'dakuten'},{h:'で',k:'デ',r:'de',g:'dakuten'},{h:'ど',k:'ド',r:'do',g:'dakuten'},
+  {h:'ば',k:'バ',r:'ba',g:'dakuten'},{h:'び',k:'ビ',r:'bi',g:'dakuten'},{h:'ぶ',k:'ブ',r:'bu',g:'dakuten'},{h:'べ',k:'ベ',r:'be',g:'dakuten'},{h:'ぼ',k:'ボ',r:'bo',g:'dakuten'},
+  // 半濁音
+  {h:'ぱ',k:'パ',r:'pa',g:'handakuten'},{h:'ぴ',k:'ピ',r:'pi',g:'handakuten'},{h:'ぷ',k:'プ',r:'pu',g:'handakuten'},{h:'ぺ',k:'ペ',r:'pe',g:'handakuten'},{h:'ぽ',k:'ポ',r:'po',g:'handakuten'},
+].map((d,i)=>({...d, id:'kana-'+i, type:'kana'}));
+
+// ---- 單字 N5 ----
+const VOCAB = [
+  {kana:'わたし',kanji:'私',romaji:'watashi',meaning:'我',level:'N5',ex:'私は学生です。',exMeaning:'我是學生。'},
+  {kana:'がっこう',kanji:'学校',romaji:'gakkou',meaning:'學校',level:'N5',ex:'学校は九時からです。',exMeaning:'學校九點開始。'},
+  {kana:'せんせい',kanji:'先生',romaji:'sensei',meaning:'老師',level:'N5',ex:'田中先生はやさしいです。',exMeaning:'田中老師很和藹。'},
+  {kana:'がくせい',kanji:'学生',romaji:'gakusei',meaning:'學生',level:'N5',ex:'私たちは高校の学生です。',exMeaning:'我們是高中生。'},
+  {kana:'ともだち',kanji:'友達',romaji:'tomodachi',meaning:'朋友',level:'N5',ex:'友達と映画を見ます。',exMeaning:'和朋友一起看電影。'},
+  {kana:'かぞく',kanji:'家族',romaji:'kazoku',meaning:'家人',level:'N5',ex:'家族で旅行に行きます。',exMeaning:'和家人一起去旅行。'},
+  {kana:'たべる',kanji:'食べる',romaji:'taberu',meaning:'吃',level:'N5',ex:'朝ごはんを食べます。',exMeaning:'吃早餐。'},
+  {kana:'のむ',kanji:'飲む',romaji:'nomu',meaning:'喝',level:'N5',ex:'水を飲みます。',exMeaning:'喝水。'},
+  {kana:'いく',kanji:'行く',romaji:'iku',meaning:'去',level:'N5',ex:'学校に行きます。',exMeaning:'去學校。'},
+  {kana:'くる',kanji:'来る',romaji:'kuru',meaning:'來',level:'N5',ex:'友達が来ます。',exMeaning:'朋友要來。'},
+  {kana:'みる',kanji:'見る',romaji:'miru',meaning:'看',level:'N5',ex:'テレビを見ます。',exMeaning:'看電視。'},
+  {kana:'きく',kanji:'聞く',romaji:'kiku',meaning:'聽 / 問',level:'N5',ex:'音楽を聞きます。',exMeaning:'聽音樂。'},
+  {kana:'はなす',kanji:'話す',romaji:'hanasu',meaning:'說話',level:'N5',ex:'先生と話します。',exMeaning:'和老師說話。'},
+  {kana:'よむ',kanji:'読む',romaji:'yomu',meaning:'讀',level:'N5',ex:'本を読みます。',exMeaning:'讀書。'},
+  {kana:'かく',kanji:'書く',romaji:'kaku',meaning:'寫',level:'N5',ex:'名前を書きます。',exMeaning:'寫名字。'},
+  {kana:'かう',kanji:'買う',romaji:'kau',meaning:'買',level:'N5',ex:'パンを買います。',exMeaning:'買麵包。'},
+  {kana:'おおきい',kanji:'大きい',romaji:'ookii',meaning:'大的',level:'N5',ex:'この家は大きいです。',exMeaning:'這間房子很大。'},
+  {kana:'ちいさい',kanji:'小さい',romaji:'chiisai',meaning:'小的',level:'N5',ex:'犬は小さいです。',exMeaning:'狗很小。'},
+  {kana:'あたらしい',kanji:'新しい',romaji:'atarashii',meaning:'新的',level:'N5',ex:'新しい靴を買いました。',exMeaning:'買了新鞋子。'},
+  {kana:'きょう',kanji:'今日',romaji:'kyou',meaning:'今天',level:'N5',ex:'今日は暑いです。',exMeaning:'今天很熱。'},
+].map((d,i)=>({...d, id:'vocab-'+i, type:'vocab'}));
+
+// ---- 文法 ----
+const GRAMMAR = [
+  {title:'は — 主題助詞',level:'N5',
+    explain:'用來提示句子的主題,「は」讀作 wa。回答問句、自我介紹、對比時常用。',
+    ex:'私は先生です。',exMeaning:'我是老師。'},
+  {title:'を — 受詞助詞',level:'N5',
+    explain:'標示動作的對象(受詞),放在名詞後、他動詞前。',
+    ex:'水を飲みます。',exMeaning:'喝水。'},
+  {title:'に — 時間 / 方向',level:'N5',
+    explain:'表示具體時間點或動作到達的方向、對象。常見錯誤:時間用「で」而非「に」。',
+    ex:'七時に起きます。',exMeaning:'七點起床。'},
+  {title:'で — 場所 / 手段',level:'N5',
+    explain:'表示動作發生的場所,或使用的工具、方法。與表示存在的「に」不同,「で」用在有動作發生的地方。',
+    ex:'図書館で勉強します。',exMeaning:'在圖書館唸書。'},
+  {title:'ます形 — 禮貌形',level:'N5',
+    explain:'動詞的禮貌體,用於對長輩、老師、初次見面的人。字典形改成ます形時要依動詞類別變化語尾。',
+    ex:'毎日日本語を勉強します。',exMeaning:'每天學習日文。'},
+].map((d,i)=>({...d, id:'grammar-'+i, type:'grammar'}));
+
+// ---- 會話句型 ----
+const PATTERNS = [
+  {category:'打招呼', template:'〜さん、おはようございます。', meaning:'早安,〜先生/小姐。',
+    examples:[{jp:'田中さん、おはようございます。',mn:'田中先生,早安。'},{jp:'鈴木さん、こんにちは。',mn:'鈴木小姐,你好。'}]},
+  {category:'自我介紹', template:'はじめまして、〜と申します。', meaning:'初次見面,我是〜。',
+    examples:[{jp:'はじめまして、王と申します。',mn:'初次見面,我姓王。'},{jp:'はじめまして、林と申します。よろしくお願いします。',mn:'初次見面,我姓林,請多多指教。'}]},
+  {category:'請求', template:'〜てください。', meaning:'請〜。',
+    examples:[{jp:'ちょっと待ってください。',mn:'請稍等一下。'},{jp:'もう一度言ってください。',mn:'請再說一次。'}]},
+  {category:'請求許可', template:'〜てもいいですか。', meaning:'可以〜嗎?',
+    examples:[{jp:'ここに座ってもいいですか。',mn:'我可以坐這裡嗎?'},{jp:'写真を撮ってもいいですか。',mn:'可以拍照嗎?'}]},
+  {category:'道歉', template:'すみません、〜。', meaning:'不好意思,〜。',
+    examples:[{jp:'すみません、遅れました。',mn:'不好意思,我遲到了。'},{jp:'すみません、わかりません。',mn:'不好意思,我不知道。'}]},
+  {category:'道謝', template:'〜てくれてありがとうございます。', meaning:'謝謝你為我〜。',
+    examples:[{jp:'手伝ってくれてありがとうございます。',mn:'謝謝你幫忙。'},{jp:'教えてくれてありがとうございます。',mn:'謝謝你教我。'}]},
+  {category:'購物', template:'これはいくらですか。', meaning:'這個多少錢?',
+    examples:[{jp:'この本はいくらですか。',mn:'這本書多少錢?'},{jp:'このかばんはいくらですか。',mn:'這個包包多少錢?'}]},
+  {category:'購物', template:'〜を見せてください。', meaning:'請給我看〜。',
+    examples:[{jp:'あの服を見せてください。',mn:'請給我看那件衣服。'},{jp:'別の色を見せてください。',mn:'請給我看別的顏色。'}]},
+  {category:'餐廳', template:'〜をお願いします。', meaning:'請給我〜。',
+    examples:[{jp:'コーヒーをお願いします。',mn:'請給我咖啡。'},{jp:'これをお願いします。',mn:'請給我這個。'}]},
+  {category:'餐廳', template:'おすすめは何ですか。', meaning:'有推薦的嗎?',
+    examples:[{jp:'今日のおすすめは何ですか。',mn:'今天有推薦的嗎?'},{jp:'人気のメニューは何ですか。',mn:'哪個是熱門菜色?'}]},
+  {category:'問路', template:'〜はどこですか。', meaning:'〜在哪裡?',
+    examples:[{jp:'駅はどこですか。',mn:'車站在哪裡?'},{jp:'トイレはどこですか。',mn:'洗手間在哪裡?'}]},
+  {category:'問路', template:'どうやって行きますか。', meaning:'要怎麼去?',
+    examples:[{jp:'空港までどうやって行きますか。',mn:'到機場要怎麼去?'}]},
+  {category:'時間', template:'〜は何時からですか。', meaning:'〜幾點開始?',
+    examples:[{jp:'お店は何時からですか。',mn:'店家幾點開始營業?'},{jp:'会議は何時からですか。',mn:'會議幾點開始?'}]},
+  {category:'邀約', template:'一緒に〜ませんか。', meaning:'要不要一起〜?',
+    examples:[{jp:'一緒に食事しませんか。',mn:'要不要一起吃飯?'},{jp:'一緒に映画を見ませんか。',mn:'要不要一起看電影?'}]},
+  {category:'電話', template:'もしもし、〜です。', meaning:'喂,我是〜。',
+    examples:[{jp:'もしもし、田中です。',mn:'喂,我是田中。'},{jp:'もしもし、山田会社の鈴木です。',mn:'喂,我是山田公司的鈴木。'}]},
+  {category:'職場', template:'明日、休ませていただけますか。', meaning:'明天可以請假嗎?',
+    examples:[{jp:'来週の月曜日、休ませていただけますか。',mn:'下週一可以請假嗎?'}]},
+].map((d,i)=>({...d, id:'pattern-'+i, type:'pattern'}));
+
+/* =========================================================
+   已學狀態(localStorage,預留 GAS 同步接口)
+   ========================================================= */
+/* =========================================================
+   語音朗讀(Web Speech API,免費、不需音檔)
+   ========================================================= */
+const canSpeak = 'speechSynthesis' in window;
+let jaVoice = null;
+function loadJaVoice(){
+  if(!canSpeak) return;
+  const voices = speechSynthesis.getVoices();
+  jaVoice = voices.find(v=>v.lang==='ja-JP') || voices.find(v=>v.lang && v.lang.startsWith('ja')) || null;
+}
+if(canSpeak){
+  loadJaVoice();
+  speechSynthesis.onvoiceschanged = loadJaVoice;
+}
+function speak(text, btn){
+  if(!canSpeak){ alert('這個瀏覽器不支援語音朗讀功能'); return; }
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  if(jaVoice) utter.voice = jaVoice;
+  utter.rate = 0.9;
+  if(btn){
+    btn.classList.add('playing');
+    utter.onend = ()=>btn.classList.remove('playing');
+    utter.onerror = ()=>btn.classList.remove('playing');
+  }
+  speechSynthesis.speak(utter);
+}
+function sndBtn(text){
+  // 用 data-text 存文字,交由事件委派處理,避免字串裡的引號 escape 問題
+  return `<span class="snd" data-say="${encodeURIComponent(text)}" title="播放發音">🔊</span>`;
+}
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('.snd');
+  if(!btn) return;
+  e.stopPropagation();
+  speak(decodeURIComponent(btn.dataset.say), btn);
+});
+
+const KNOWN_KEY = 'jp_app_known_v1';
+let knownMap = JSON.parse(localStorage.getItem(KNOWN_KEY) || '{}');
+
+function isKnown(id){ return !!knownMap[id]; }
+function toggleKnown(id, val){
+  knownMap[id] = val;
+  localStorage.setItem(KNOWN_KEY, JSON.stringify(knownMap));
+  pushKnown(id, val); // 之後接 GAS 用
+}
+function pushKnown(id, val){
+  if(!SYNC_URL) return;
+  fetch(SYNC_URL, {method:'POST', body: JSON.stringify({id, val})}).catch(()=>{});
+}
+
+/* =========================================================
+   Tabs
+   ========================================================= */
+document.querySelectorAll('nav.tabs button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* =========================================================
+   五十音
+   ========================================================= */
+let kanaFilter = 'all';
+document.querySelectorAll('.kana-controls button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.kana-controls button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    kanaFilter = btn.dataset.kgroup;
+    renderKana();
+  });
+});
+function renderKana(){
+  const grid = document.getElementById('kana-grid');
+  const list = KANA.filter(k => kanaFilter==='all' || k.g===kanaFilter);
+  document.getElementById('kana-count').textContent = list.length + ' 個字';
+  grid.innerHTML = list.map(k=>`
+    <div class="kana-card" data-id="${k.id}">
+      ${sndBtn(k.h)}
+      <div class="glyph">${k.h}<br>${k.k}</div>
+      <div class="rom">${k.r}</div>
+    </div>`).join('');
+  grid.querySelectorAll('.kana-card').forEach(card=>{
+    card.addEventListener('click', e=>{
+      if(e.target.closest('.snd')) return;
+      card.classList.toggle('revealed');
+    });
+  });
+}
+renderKana();
+
+/* =========================================================
+   單字
+   ========================================================= */
+function renderVocab(){
+  const q = document.getElementById('vocab-search').value.trim().toLowerCase();
+  const hideKnown = document.getElementById('vocab-hide-known').checked;
+  const list = VOCAB.filter(v=>{
+    if(hideKnown && isKnown(v.id)) return false;
+    if(!q) return true;
+    return (v.kana+v.kanji+v.romaji+v.meaning+v.ex+v.exMeaning).toLowerCase().includes(q);
+  });
+  document.getElementById('vocab-count').textContent = list.length + ' / ' + VOCAB.length + ' 字';
+  document.getElementById('vocab-list').innerHTML = list.length ? list.map(v=>`
+    <div class="item-card">
+      <div class="item-top">
+        <div class="item-main">
+          <div class="jp-main">${v.kana}<span class="kanji">${v.kanji}</span>${sndBtn(v.kana)}</div>
+          <div class="romaji">${v.romaji}</div>
+          <div class="meaning">${v.meaning}</div>
+        </div>
+        <div class="level-tag">${v.level}</div>
+        <div class="known-check">
+          <input type="checkbox" data-id="${v.id}" ${isKnown(v.id)?'checked':''}>已學
+        </div>
+      </div>
+      <div class="example"><span class="ex-jp">${v.ex}</span>${sndBtn(v.ex)} ／ ${v.exMeaning}</div>
+    </div>`).join('') : `<div class="empty-note">沒有符合條件的單字</div>`;
+  document.getElementById('vocab-list').querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); renderVocab(); });
+  });
+}
+document.getElementById('vocab-search').addEventListener('input', renderVocab);
+document.getElementById('vocab-hide-known').addEventListener('change', renderVocab);
+document.getElementById('vocab-level').addEventListener('change', renderVocab);
+renderVocab();
+
+/* =========================================================
+   文法
+   ========================================================= */
+function renderGrammar(){
+  const q = document.getElementById('grammar-search').value.trim().toLowerCase();
+  const hideKnown = document.getElementById('grammar-hide-known').checked;
+  const list = GRAMMAR.filter(g=>{
+    if(hideKnown && isKnown(g.id)) return false;
+    if(!q) return true;
+    return (g.title+g.explain+g.ex+g.exMeaning).toLowerCase().includes(q);
+  });
+  document.getElementById('grammar-count').textContent = list.length + ' / ' + GRAMMAR.length + ' 點';
+  document.getElementById('grammar-list').innerHTML = list.length ? list.map(g=>`
+    <div class="item-card grammar" data-id="${g.id}">
+      <div class="item-top">
+        <div class="item-main">
+          <div class="jp-main" style="font-size:19px;">${g.title}</div>
+        </div>
+        <div class="level-tag">${g.level}</div>
+        <div class="known-check">
+          <input type="checkbox" data-id="${g.id}" ${isKnown(g.id)?'checked':''} onclick="event.stopPropagation()">已學
+        </div>
+      </div>
+      <div class="grammar-explain">
+        <p>${g.explain}</p>
+        <div class="example"><span class="ex-jp">${g.ex}</span>${sndBtn(g.ex)} ／ ${g.exMeaning}</div>
+      </div>
+    </div>`).join('') : `<div class="empty-note">沒有符合條件的文法點</div>`;
+  document.getElementById('grammar-list').querySelectorAll('.item-card').forEach(card=>{
+    card.addEventListener('click', e=>{
+      if(e.target.closest('.snd')) return;
+      card.classList.toggle('open');
+    });
+  });
+  document.getElementById('grammar-list').querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); renderGrammar(); });
+  });
+}
+document.getElementById('grammar-search').addEventListener('input', renderGrammar);
+document.getElementById('grammar-hide-known').addEventListener('change', renderGrammar);
+renderGrammar();
+
+/* =========================================================
+   會話句型
+   ========================================================= */
+const patternCategories = [...new Set(PATTERNS.map(p=>p.category))];
+const catSelect = document.getElementById('pattern-category');
+patternCategories.forEach(c=>{
+  const opt = document.createElement('option');
+  opt.value = c; opt.textContent = c;
+  catSelect.appendChild(opt);
+});
+function renderPattern(){
+  const q = document.getElementById('pattern-search').value.trim().toLowerCase();
+  const cat = document.getElementById('pattern-category').value;
+  const list = PATTERNS.filter(p=>{
+    if(cat!=='all' && p.category!==cat) return false;
+    if(!q) return true;
+    const hay = (p.template+p.meaning+p.category+p.examples.map(e=>e.jp+e.mn).join('')).toLowerCase();
+    return hay.includes(q);
+  });
+  document.getElementById('pattern-count').textContent = list.length + ' / ' + PATTERNS.length + ' 句型';
+  // group by category for display
+  const groups = {};
+  list.forEach(p=>{ (groups[p.category] = groups[p.category]||[]).push(p); });
+  const html = Object.keys(groups).map(cat=>`
+    <div class="pattern-group">
+      <h3>${cat}</h3>
+      ${groups[cat].map(p=>`
+        <div class="item-card">
+          <div class="pattern-template">${p.template}${sndBtn(p.template)}</div>
+          <div class="pattern-meaning">${p.meaning}</div>
+          <ul class="pattern-examples">
+            ${p.examples.map(e=>`<li><span class="ex-jp">${e.jp}</span>${sndBtn(e.jp)} ${e.mn}</li>`).join('')}
+          </ul>
+        </div>`).join('')}
+    </div>`).join('');
+  document.getElementById('pattern-list').innerHTML = html || `<div class="empty-note">沒有符合條件的句型</div>`;
+}
+document.getElementById('pattern-search').addEventListener('input', renderPattern);
+document.getElementById('pattern-category').addEventListener('change', renderPattern);
+renderPattern();
+
+
+</script>
+</body>
+</html>

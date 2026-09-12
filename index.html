@@ -2,10 +2,10 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>日本語トレーニング | 日語學習</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --washi:#F6F1E4;
@@ -27,10 +27,19 @@
       radial-gradient(circle at 1px 1px, rgba(35,50,74,0.05) 1px, transparent 0);
     background-size: 22px 22px;
     color:var(--ink);
-    font-family:'Noto Sans JP', sans-serif;
-    line-height:1.6;
+    font-family:'Noto Sans TC', 'Noto Sans JP', sans-serif;
+    font-size:16px;
+    line-height:1.75;
+    -webkit-text-size-adjust:100%;
+    padding-left:env(safe-area-inset-left);
+    padding-right:env(safe-area-inset-right);
   }
-  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px;}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px calc(60px + env(safe-area-inset-bottom));}
+  /* 日文假名/漢字內容維持日文字型,筆畫與繁中略有不同 */
+  .jp-main, .ex-jp, .pattern-template, .pattern-examples .ex-jp,
+  .gj-main, .gj-sub, .gj-head-kana, .gj-label-main{
+    font-family:'Noto Sans JP', sans-serif;
+  }
 
   /* ---- Header ---- */
   header{display:flex;align-items:center;gap:18px;margin-bottom:28px;}
@@ -51,15 +60,16 @@
     font-size:28px;font-weight:700;margin:0;
     letter-spacing:.02em;
   }
-  header p{margin:2px 0 0;color:var(--ink-soft);font-size:14px;}
+  header p{margin:2px 0 0;color:var(--ink-soft);font-size:15px;}
 
   /* ---- Tabs ---- */
   nav.tabs{display:flex;border-bottom:1px solid var(--line-strong);margin-bottom:22px;overflow-x:auto;}
   nav.tabs button{
-    font-family:'Noto Sans JP',sans-serif;
+    font-family:'Noto Sans TC','Noto Sans JP',sans-serif;
     background:none;border:none;
-    padding:12px 18px 14px;
-    font-size:15px;font-weight:500;
+    padding:14px 18px;
+    min-height:44px;
+    font-size:16px;font-weight:500;
     color:var(--ink-soft);
     cursor:pointer;position:relative;
     white-space:nowrap;
@@ -74,31 +84,33 @@
   .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px;}
   .toolbar input[type=text]{
     flex:1 1 200px;
-    padding:9px 12px;
+    padding:12px 14px;
     border:1px solid var(--line-strong);
     border-radius:8px;
     background:var(--paper);
-    font-family:inherit;font-size:14px;color:var(--ink);
+    font-family:inherit;font-size:16px;color:var(--ink);
+    min-height:44px;
   }
   .toolbar select{
-    padding:9px 10px;border:1px solid var(--line-strong);border-radius:8px;
-    background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);
+    padding:12px 12px;border:1px solid var(--line-strong);border-radius:8px;
+    background:var(--paper);font-family:inherit;font-size:16px;color:var(--ink);
+    min-height:44px;
   }
   .toolbar label.chk{
-    display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);
-    padding:9px 10px;border:1px solid transparent;
+    display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-soft);
+    padding:10px;border:1px solid transparent;min-height:44px;
   }
-  .toolbar input[type=checkbox]{accent-color:var(--vermillion);width:16px;height:16px;}
-  .count-badge{font-size:12px;color:var(--ink-soft);margin-left:auto;padding:9px 2px;}
+  .toolbar input[type=checkbox]{accent-color:var(--vermillion);width:20px;height:20px;}
+  .count-badge{font-size:13px;color:var(--ink-soft);margin-left:auto;padding:9px 2px;}
 
   /* ---- Section switching ---- */
   section{display:none;}
   section.active{display:block;}
 
   /* ---- Gojuon table ---- */
-  .script-toggle{display:flex;gap:8px;margin-bottom:16px;}
+  .script-toggle{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
   .script-toggle button{
-    font-family:inherit;font-size:13px;padding:7px 14px;border-radius:20px;
+    font-family:inherit;font-size:14px;padding:10px 16px;border-radius:20px;min-height:44px;
     border:1px solid var(--line-strong);background:var(--paper);color:var(--ink-soft);cursor:pointer;
   }
   .script-toggle button.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
@@ -112,24 +124,24 @@
   .gj-row{display:grid;grid-template-columns:56px repeat(5,1fr);gap:6px;margin-bottom:6px;}
   .gj-head{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    font-size:12px;color:var(--ink-soft);padding:6px 0;
+    font-size:13px;color:var(--ink-soft);padding:6px 0;
   }
-  .gj-head .gj-head-kana{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--ink);}
+  .gj-head .gj-head-kana{font-family:'Shippori Mincho',serif;font-size:17px;color:var(--ink);}
   .gj-label{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     background:var(--moss-soft);border-radius:8px;color:var(--moss);
   }
-  .gj-label .gj-label-main{font-family:'Shippori Mincho',serif;font-size:20px;}
-  .gj-label .gj-label-rom{font-size:10px;opacity:.8;}
+  .gj-label .gj-label-main{font-family:'Shippori Mincho',serif;font-size:21px;}
+  .gj-label .gj-label-rom{font-size:11px;opacity:.85;}
   .gj-cell{
     position:relative;background:var(--paper);border:1px solid var(--line);border-radius:8px;
-    padding:8px 4px 6px;text-align:center;
+    padding:10px 4px 8px;text-align:center;min-height:64px;
   }
   .gj-cell.empty{background:transparent;border:1px dashed var(--line);opacity:.35;}
-  .gj-cell .gj-main{font-family:'Shippori Mincho',serif;font-size:24px;line-height:1.1;color:var(--ink);}
-  .gj-cell .gj-sub{font-size:14px;color:var(--ink-soft);display:block;}
-  .gj-cell .gj-rom{font-size:11px;color:var(--vermillion);margin-top:2px;}
-  .gj-cell .snd{position:absolute;top:3px;right:3px;width:18px;height:18px;font-size:9px;margin:0;}
+  .gj-cell .gj-main{font-family:'Shippori Mincho',serif;font-size:25px;line-height:1.15;color:var(--ink);}
+  .gj-cell .gj-sub{font-size:15px;color:var(--ink-soft);display:block;}
+  .gj-cell .gj-rom{font-size:12px;color:var(--vermillion);margin-top:3px;}
+  .gj-cell .snd{position:absolute;top:2px;right:2px;width:22px;height:22px;font-size:11px;margin:0;}
 
   /* ---- Vocab / Grammar / Pattern cards ---- */
   .item-card{
@@ -140,21 +152,21 @@
   .item-main{flex:1;}
   .jp-main{font-family:'Shippori Mincho',serif;font-size:22px;color:var(--ink);}
   .jp-main .kanji{margin-left:8px;font-size:16px;color:var(--ink-soft);font-family:'Noto Sans JP',sans-serif;}
-  .romaji{font-size:12px;color:var(--vermillion);margin-top:2px;}
-  .meaning{font-size:14px;margin-top:4px;color:var(--ink);}
+  .romaji{font-size:13px;color:var(--vermillion);margin-top:2px;}
+  .meaning{font-size:15px;margin-top:4px;color:var(--ink);}
   .level-tag{
-    font-size:11px;padding:2px 8px;border-radius:12px;background:var(--moss-soft);color:var(--moss);
+    font-size:12px;padding:3px 9px;border-radius:12px;background:var(--moss-soft);color:var(--moss);
     flex:none;align-self:flex-start;
   }
-  .known-check{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink-soft);}
-  .known-check input{width:18px;height:18px;accent-color:var(--moss);}
+  .known-check{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--ink-soft);min-height:44px;justify-content:center;}
+  .known-check input{width:22px;height:22px;accent-color:var(--moss);}
   .example{
     margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-strong);
     font-size:13.5px;color:var(--ink-soft);
   }
   .example .ex-jp{color:var(--ink);}
 
-  .grammar-explain{margin-top:8px;font-size:14px;color:var(--ink-soft);display:none;}
+  .grammar-explain{margin-top:8px;font-size:15px;color:var(--ink-soft);display:none;}
   .item-card.open .grammar-explain{display:block;}
   .item-card.grammar{cursor:pointer;}
 
@@ -164,20 +176,20 @@
     color:var(--vermillion);border-bottom:1px solid var(--line);padding-bottom:6px;
   }
   .pattern-template{font-size:18px;font-family:'Shippori Mincho',serif;color:var(--ink);}
-  .pattern-meaning{font-size:13px;color:var(--ink-soft);margin:4px 0 8px;}
+  .pattern-meaning{font-size:14px;color:var(--ink-soft);margin:4px 0 8px;}
   .pattern-examples{list-style:none;margin:0;padding:0;}
-  .pattern-examples li{font-size:13.5px;padding:4px 0;color:var(--ink-soft);}
+  .pattern-examples li{font-size:14.5px;padding:5px 0;color:var(--ink-soft);}
   .pattern-examples li .ex-jp{color:var(--ink);margin-right:6px;}
 
-  .empty-note{color:var(--ink-soft);font-size:13px;padding:30px 0;text-align:center;}
+  .empty-note{color:var(--ink-soft);font-size:14px;padding:30px 0;text-align:center;}
 
   /* ---- Sound button ---- */
   .snd{
     display:inline-flex;align-items:center;justify-content:center;
-    width:24px;height:24px;border-radius:50%;
+    width:28px;height:28px;border-radius:50%;
     border:1px solid var(--line-strong);background:var(--washi);
     color:var(--ink-soft);cursor:pointer;flex:none;
-    font-size:12px;line-height:1;vertical-align:middle;margin-left:6px;
+    font-size:13px;line-height:1;vertical-align:middle;margin-left:6px;
     transition:background .15s,color .15s,border-color .15s;
   }
   .snd:hover{background:var(--vermillion);border-color:var(--vermillion);color:var(--paper);}

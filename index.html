@@ -142,6 +142,7 @@
   .gj-cell .gj-sub{font-size:15px;color:var(--ink-soft);display:block;}
   .gj-cell .gj-rom{font-size:12px;color:var(--vermillion);margin-top:3px;}
   .gj-cell .snd{position:absolute;top:2px;right:2px;width:22px;height:22px;font-size:11px;margin:0;}
+  .gj-cell .gj-known{position:absolute;top:4px;left:4px;width:15px;height:15px;accent-color:var(--moss);margin:0;}
 
   /* ---- Vocab / Grammar / Pattern cards ---- */
   .item-card{
@@ -206,6 +207,20 @@
   }
   .beginner-banner b{color:var(--moss);}
 
+  /* ---- 學習進度 ---- */
+  .progress-item{margin-bottom:20px;}
+  .progress-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:15px;}
+  .progress-label .p-name{font-family:'Shippori Mincho',serif;color:var(--ink);font-size:17px;}
+  .progress-label .p-stat{color:var(--ink-soft);font-size:13px;}
+  .progress-bar-bg{background:var(--paper);border:1px solid var(--line);border-radius:8px;height:16px;overflow:hidden;}
+  .progress-bar-fill{background:var(--vermillion);height:100%;border-radius:8px;transition:width .3s;}
+  .progress-summary{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:16px;margin-bottom:24px;text-align:center;
+  }
+  .progress-summary .big-num{font-family:'Shippori Mincho',serif;font-size:36px;color:var(--vermillion);}
+  .progress-summary .big-label{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+
   /* ---- 假名注音 (ruby) ---- */
   ruby{font-family:'Noto Sans JP',sans-serif;ruby-position:over;}
   rt{font-size:0.5em;color:var(--ink-soft);font-weight:400;user-select:none;}
@@ -263,6 +278,7 @@
     <button data-tab="grammar">文法</button>
     <button data-tab="pattern">会話句型</button>
     <button data-tab="drama">日劇台詞</button>
+    <button data-tab="progress">學習進度</button>
   </nav>
 
   <!-- KANA -->
@@ -318,6 +334,11 @@
       <span class="count-badge" id="drama-count"></span>
     </div>
     <div id="drama-list"></div>
+  </section>
+
+  <!-- PROGRESS (學習進度) -->
+  <section id="tab-progress">
+    <div id="progress-wrap"></div>
   </section>
 
 </div>
@@ -611,6 +632,69 @@ const GRAMMAR = [
     explain:'動詞的禮貌體,用於對長輩、老師、初次見面的人。字典形改成ます形時要依動詞類別變化語尾。',
     ex:'{毎日|まいにち}{日本語|にほんご}を{勉強|べんきょう}します。',exMeaning:'每天學習日文。',
     slot:'{毎日|まいにち}〜。',subs:['{日本語|にほんご}を{勉強|べんきょう}します','{水|みず}を{飲|の}みます','{学校|がっこう}に{行|い}きます','{音楽|おんがく}を{聞|き}きます']},
+  {title:'います — 存在句(人／動物)',level:'N5',
+    explain:'表示人或動物「在」某個地方,用「います」。物品或植物用「あります」(見下一點)。',
+    ex:'{部屋|へや}に{猫|ねこ}がいます。',exMeaning:'房間裡有貓。',
+    slot:'{部屋|へや}に〜がいます。',subs:['{猫|ねこ}','{犬|いぬ}','{先生|せんせい}','{友達|ともだち}']},
+  {title:'あります — 存在句(物品)',level:'N5',
+    explain:'表示物品、植物等「在」某個地方,用「あります」。跟「います」的差別在於對象是不是有生命、會自己動的東西。',
+    ex:'{机|つくえ}の{上|うえ}に{本|ほん}があります。',exMeaning:'桌上有書。',
+    slot:'{机|つくえ}の{上|うえ}に〜があります。',subs:['{本|ほん}','ペン','{鉛筆|えんぴつ}','かばん']},
+  {title:'〜たいです — 想要做',level:'N5',
+    explain:'動詞ます形去掉「ます」加上「たいです」,表示說話者自己想做某件事。',
+    ex:'{日本|にほん}に{行|い}きたいです。',exMeaning:'想去日本。',
+    slot:'{日本|にほん}に〜たいです。',subs:['{行|い}き','{住|す}み','{旅行|りょこう}し']},
+  {title:'〜ません／〜ないです — 動詞否定形',level:'N5',
+    explain:'ます形的否定形式。「〜ません」是標準禮貌形,「〜ないです」語感上較口語但一樣禮貌。',
+    ex:'{今日|きょう}は{食|た}べません。',exMeaning:'今天不吃。',
+    slot:'{今日|きょう}は〜ません。',subs:['{食|た}べ','{行|い}き','{勉強|べんきょう}し','{寝|ね}']},
+  {title:'て形 — 連接動作',level:'N5',
+    explain:'動詞的て形可以把兩個以上的動作連接起來,表示先做什麼、再做什麼。',
+    ex:'{朝|あさ}{起|お}きて、{顔|かお}を{洗|あら}います。',exMeaning:'早上起床後洗臉。',
+    slot:'{朝|あさ}{起|お}きて、〜。',subs:['{顔|かお}を{洗|あら}います','{朝|あさ}ご{飯|はん}を{食|た}べます','{学校|がっこう}に{行|い}きます']},
+  {title:'〜から — 原因理由(口語)',level:'N5',
+    explain:'用來說明原因或理由,語氣直接、口語,常用於對朋友、家人說明理由。',
+    ex:'{忙|いそが}しいから、{行|い}けません。',exMeaning:'因為很忙,所以不能去。',
+    slot:'{忙|いそが}しいから、〜。',subs:['{行|い}けません','{休|やす}みます','{電話|でんわ}できません']},
+  {title:'〜ので — 原因理由(較禮貌)',level:'N5',
+    explain:'意思跟「から」一樣,但語氣更委婉、有禮貌,常用於對長輩、老師或正式場合。',
+    ex:'{雨|あめ}なので、{休|やす}みます。',exMeaning:'因為下雨,所以休息。',
+    slot:'{雨|あめ}なので、〜。',subs:['{休|やす}みます','{出|で}かけません','{傘|かさ}を{持|も}って{行|い}きます']},
+  {title:'〜より — 比較',level:'N5',
+    explain:'「AはBより〜」表示A比B更〜,B是比較的基準點。',
+    ex:'{電車|でんしゃ}はバスより{速|はや}いです。',exMeaning:'電車比公車快。',
+    slot:'{電車|でんしゃ}はバスより〜。',subs:['{速|はや}いです','{便利|べんり}です','{高|たか}いです']},
+  {title:'〜ことができます — 能力',level:'N5',
+    explain:'動詞辭書形(原形)後面加「ことができます」,表示有能力做某件事、或該情況下可以做某事。',
+    ex:'{漢字|かんじ}を{読|よ}むことができます。',exMeaning:'會讀漢字。',
+    slot:'〜ことができます。',subs:['{泳|およ}ぐ','{漢字|かんじ}を{読|よ}む','{運転|うんてん}する','{料理|りょうり}を{作|つく}る']},
+  {title:'辞書形 — 動詞原形',level:'N5',
+    explain:'動詞最基本、字典上查得到的形式。常接在「ことができます」「まえに」「とき」等文型前面,是學動詞變化的起點。',
+    ex:'{日本語|にほんご}を{話|はな}す。',exMeaning:'說日文。(辭書形,普通體句子)',
+    slot:'{日本語|にほんご}を〜。',subs:['{話|はな}す','{読|よ}む','{書|か}く','{勉強|べんきょう}する']},
+  {title:'た形 — 過去式',level:'N5',
+    explain:'動詞的た形表示動作已經完成,是「ました」的普通體(口語、朋友之間)說法。不同動詞變化規則不同,需要個別記憶。',
+    ex:'{映画|えいが}を{見|み}た。',exMeaning:'看了電影。(普通體說法)'},
+  {title:'〜てはいけません — 禁止',level:'N5',
+    explain:'表示不可以做某件事,語氣較強硬,常用於規則、警告、對小孩或晚輩說話。',
+    ex:'ここでタバコを{吸|す}ってはいけません。',exMeaning:'這裡不可以抽菸。',
+    slot:'ここで〜てはいけません。',subs:['{写真|しゃしん}を{撮|と}っ','タバコを{吸|す}っ','{走|はし}っ']},
+  {title:'〜前に／〜後で — 之前／之後',level:'N5',
+    explain:'「〜前に」表示在做某動作之前,「〜後で」表示在做某動作之後,前面接動詞辭書形。',
+    ex:'{寝|ね}る{前|まえ}に、{歯|は}を{磨|みが}きます。',exMeaning:'睡覺前刷牙。',
+    slot:'{寝|ね}る{前|まえ}に、〜。',subs:['{歯|は}を{磨|みが}きます','{本|ほん}を{読|よ}みます','シャワーを{浴|あ}びます']},
+  {title:'〜ながら — 一邊…一邊…',level:'N5',
+    explain:'動詞ます形去掉「ます」加上「ながら」,表示兩個動作同時進行。',
+    ex:'{音楽|おんがく}を{聞|き}きながら、{勉強|べんきょう}します。',exMeaning:'一邊聽音樂一邊唸書。',
+    slot:'{音楽|おんがく}を{聞|き}きながら、〜。',subs:['{勉強|べんきょう}します','{走|はし}ります','{料理|りょうり}を{作|つく}ります']},
+  {title:'も — 也',level:'N5',
+    explain:'用來表示「也」,取代原本名詞後面的「は」或「が」。',
+    ex:'{私|わたし}も{学生|がくせい}です。',exMeaning:'我也是學生。',
+    slot:'{私|わたし}も〜です。',subs:['{学生|がくせい}','{先生|せんせい}','{日本人|にほんじん}','{忙|いそが}しい']},
+  {title:'と — 和、跟',level:'N5',
+    explain:'用來連接名詞,表示「和／跟」,也可以標示動作一起進行的對象。',
+    ex:'{友達|ともだち}と{映画|えいが}を{見|み}ます。',exMeaning:'跟朋友看電影。',
+    slot:'{友達|ともだち}と〜。',subs:['{映画|えいが}を{見|み}ます','{食事|しょくじ}します','{話|はな}します']},
 ].map((d,i)=>({...d, id:'grammar-'+i, type:'grammar'}));
 
 // ---- 會話句型 ----
@@ -853,6 +937,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='progress') renderProgress();
   });
 });
 
@@ -907,6 +992,7 @@ function gojuonCell(idx){
   else if(scriptMode==='katakana'){ mainChar = k.k; }
   else { mainChar = k.h; subChar = k.k; }
   return `<div class="gj-cell" data-id="${k.id}">
+      <input type="checkbox" class="gj-known" data-id="${k.id}" ${isKnown(k.id)?'checked':''} title="已熟悉">
       ${sndBtn(scriptMode==='katakana'? k.k : k.h)}
       <div class="gj-main">${mainChar}</div>
       ${subChar ? `<div class="gj-sub">${subChar}</div>` : ''}
@@ -936,6 +1022,10 @@ function renderGojuon(){
           ${row.cells.map(idx=>gojuonCell(idx)).join('')}
         </div>`).join('')}
     </div>`).join('');
+  wrap.querySelectorAll('.gj-known').forEach(cb=>{
+    cb.addEventListener('click', e=>e.stopPropagation());
+    cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); });
+  });
 }
 renderGojuon();
 
@@ -1059,12 +1149,22 @@ function renderPattern(){
       ${groups[cat].map(patternCardHtml).join('')}
     </div>`).join('');
   document.getElementById('pattern-list').innerHTML = html || `<div class="empty-note">沒有符合條件的句型</div>`;
+  document.getElementById('pattern-list').querySelectorAll('.pattern-known').forEach(cb=>{
+    cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); renderPattern(); });
+  });
 }
 function patternCardHtml(p){
   return `
         <div class="item-card">
-          <div class="pattern-template">${renderJp(p.template)}${sndBtn(stripFurigana(p.template))}</div>
-          <div class="pattern-meaning">${p.meaning}</div>
+          <div class="item-top">
+            <div class="item-main">
+              <div class="pattern-template">${renderJp(p.template)}${sndBtn(stripFurigana(p.template))}</div>
+              <div class="pattern-meaning">${p.meaning}</div>
+            </div>
+            <div class="known-check">
+              <input type="checkbox" class="pattern-known" data-id="${p.id}" ${isKnown(p.id)?'checked':''}>已學
+            </div>
+          </div>
           ${p.note ? `<div class="drama-note">${p.note}</div>` : ''}
           ${subsBlock(p.template, p.subs)}
           <ul class="pattern-examples">
@@ -1088,10 +1188,47 @@ function renderDrama(){
   });
   document.getElementById('drama-count').textContent = list.length + ' / ' + DRAMA.length + ' 句';
   document.getElementById('drama-list').innerHTML = list.length ? list.map(patternCardHtml).join('') : `<div class="empty-note">沒有符合條件的台詞</div>`;
+  document.getElementById('drama-list').querySelectorAll('.pattern-known').forEach(cb=>{
+    cb.addEventListener('change', e=>{ toggleKnown(e.target.dataset.id, e.target.checked); renderDrama(); });
+  });
 }
 document.getElementById('drama-search').addEventListener('input', renderDrama);
 renderDrama();
 
+/* =========================================================
+   學習進度
+   ========================================================= */
+function renderProgress(){
+  const categories = [
+    {name:'五十音', data:KANA},
+    {name:'單字 N5', data:VOCAB},
+    {name:'文法', data:GRAMMAR},
+    {name:'會話句型', data:PATTERNS},
+    {name:'日劇台詞', data:DRAMA},
+  ];
+  let totalKnown = 0, totalAll = 0;
+  const itemsHtml = categories.map(c=>{
+    const known = c.data.filter(x=>isKnown(x.id)).length;
+    const total = c.data.length;
+    totalKnown += known; totalAll += total;
+    const pct = total ? Math.round(known/total*100) : 0;
+    return `
+      <div class="progress-item">
+        <div class="progress-label">
+          <span class="p-name">${c.name}</span>
+          <span class="p-stat">${known} / ${total}（${pct}%）</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+  }).join('');
+  const overallPct = totalAll ? Math.round(totalKnown/totalAll*100) : 0;
+  document.getElementById('progress-wrap').innerHTML = `
+    <div class="progress-summary">
+      <div class="big-num">${overallPct}%</div>
+      <div class="big-label">整體學習進度（共 ${totalAll} 項,已完成 ${totalKnown} 項）</div>
+    </div>
+    ${itemsHtml}`;
+}
 </script>
 </body>
 </html>
